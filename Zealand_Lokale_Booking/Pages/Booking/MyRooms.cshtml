@@ -1,0 +1,29 @@
+@page
+@model Zealand_Lokale_Booking.Pages.Booking.MyRoomsModel
+@{
+ViewData["Title"] = "Mine Lokaler";
+Layout = "_Layout";
+}
+
+<h1>Mine Lokaler</h1>
+<p>Her er en liste over de lokaler, du har booket:</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Lokale</th>
+        <th>Kapacitet</th>
+        <th>Type</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var room in Model.BookedRooms)
+    {
+    <tr>
+        <td>@room.RoomName</td>
+        <td>@room.Capacity</td>
+        <td>@room.RoomType</td>
+    </tr>
+    }
+    </tbody>
+</table>

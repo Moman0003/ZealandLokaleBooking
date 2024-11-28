@@ -1,0 +1,27 @@
+@page
+@model Zealand_Lokale_Booking.Pages.Account.ProfileModel
+@{
+    ViewData["Title"] = "Min Profil";
+    Layout = "_Layout";
+}
+
+<h1>Min Profil</h1>
+<p>Her kan du se dine brugeroplysninger:</p>
+
+@if (Model.CurrentUser != null)
+{
+    <table class="table">
+        <tr>
+            <th>Navn</th>
+            <td>@Model.CurrentUser.Name</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>@Model.CurrentUser.Email</td>
+        </tr>
+    </table>
+}
+else
+{
+    <p>Der skete en fejl. Brugeren kunne ikke findes.</p>
+}

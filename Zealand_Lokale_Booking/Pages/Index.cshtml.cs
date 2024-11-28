@@ -1,18 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Zealand_Lokale_Booking.Pages;
-
-public class IndexModel : PageModel
+namespace ZealandLokaleBooking.Pages
 {
-    private readonly ILogger<IndexModel> _logger;
-
-    public IndexModel(ILogger<IndexModel> logger)
+    [AllowAnonymous] // Gør siden tilgængelig uden login
+    public class IndexModel : PageModel
     {
-        _logger = logger;
-    }
-
-    public void OnGet()
-    {
+        public void OnGet()
+        {
+        }
     }
 }
