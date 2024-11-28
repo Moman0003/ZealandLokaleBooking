@@ -1,0 +1,36 @@
+@page
+@model Zealand_Lokale_Booking.Pages.Booking.BookRoomsModel
+@{
+ViewData["Title"] = "Book Lokaler";
+Layout = "_Layout";
+}
+
+<h1>Book Lokaler</h1>
+<p>Vælg et ledigt lokale nedenfor:</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Lokale</th>
+        <th>Kapacitet</th>
+        <th>Type</th>
+        <th>Handling</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var room in Model.AvailableRooms)
+    {
+    <tr>
+        <td>@room.RoomName</td>
+        <td>@room.Capacity</td>
+        <td>@room.RoomType</td>
+        <td>
+            <form method="post" action="/Booking/BookRooms">
+                <input type="hidden" name="RoomId" value="@room.RoomId" />
+                <button type="submit" class="btn btn-primary">Book</button>
+            </form>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>

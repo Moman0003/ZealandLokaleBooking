@@ -1,19 +1,28 @@
 using Microsoft.EntityFrameworkCore;
 using ZealandLokaleBooking.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Tilføj services til containeren
-builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Tilføj autentificering
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Redirect til login, hvis ikke logget ind
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Redirect ved adgang nægtet
+    });
 
 var app = builder.Build();
 
 // Middleware pipeline
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
 
@@ -22,11 +31,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication(); // Aktiver autentificering
+app.UseAuthorization();  // Aktiver autorisation
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+// Map Razor Pages og andre ruter
+app.MapRazorPages();
 
+app.Run();

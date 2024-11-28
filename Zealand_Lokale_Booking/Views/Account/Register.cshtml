@@ -1,0 +1,19 @@
+@model ZealandLokaleBooking.Models.User
+
+<h2>Opret Bruger</h2>
+
+<form method="post" asp-controller="Account" asp-action="Register">
+    <div class="mb-3">
+        <label for="Name" class="form-label">Navn</label>
+        <input type="text" class="form-control" id="Name" name="Name" required />
+    </div>
+    <div class="mb-3">
+        <label for="Email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="Email" name="Email" required />
+    </div>
+    <div class="mb-3">
+        <label for="Password" class="form-label">Adgangskode</label>
+        <input type="password" class="form-control" id="Password" name="Password" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Opret Bruger</button>
+</form>
