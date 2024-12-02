@@ -1,10 +1,25 @@
-@page
-@{
-ViewData["Title"] = "Student Dashboard";
-Layout = "_Layout";
+@model IEnumerable<ZealandLokaleBooking.Models.Booking>
 
-}
+<h2>Dine Bookinger</h2>
 
-<h1>Student Dashboard</h1>
-<p>Velkommen til dit dashboard!</p>
-
+<table class="table">
+    <thead>
+    <tr>
+        <th>Lokale</th>
+        <th>Dato</th>
+        <th>Handling</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var booking in Model)
+    {
+        <tr>
+            <td>@booking.Room.RoomName</td>
+            <td>@booking.Date.ToShortDateString()</td>
+            <td>
+                <a asp-action="ConfirmDelete" asp-controller="Booking" asp-route-id="@booking.BookingId" class="btn btn-warning">Slet</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
