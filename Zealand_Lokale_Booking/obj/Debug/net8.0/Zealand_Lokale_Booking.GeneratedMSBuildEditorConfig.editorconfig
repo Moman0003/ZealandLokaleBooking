@@ -66,6 +66,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU3R1ZGVudERhc2hib2FyZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/TeacherDashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVGVhY2hlckRhc2hib2FyZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -84,10 +88,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Views/Room/AvailableRooms.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUm9vbS9BdmFpbGFibGVSb29tcy5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Views/Teacher/TeacherDashboard.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVGVhY2hlci9UZWFjaGVyRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/Shared/_Layout.cshtml]

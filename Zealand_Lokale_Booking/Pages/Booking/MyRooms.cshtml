@@ -1,8 +1,8 @@
 @page
 @model Zealand_Lokale_Booking.Pages.Booking.MyRoomsModel
 @{
-ViewData["Title"] = "Mine Lokaler";
-Layout = "_Layout";
+    ViewData["Title"] = "Mine Lokaler";
+    Layout = "_Layout";
 }
 
 <h1>Mine Lokaler</h1>
@@ -14,6 +14,7 @@ Layout = "_Layout";
         <th>Lokale</th>
         <th>Kapacitet</th>
         <th>Type</th>
+        <th>Handling</th>
     </tr>
     </thead>
     <tbody>
@@ -23,6 +24,12 @@ Layout = "_Layout";
         <td>@room.RoomName</td>
         <td>@room.Capacity</td>
         <td>@room.RoomType</td>
+        <td>
+            <form method="post" asp-page-handler="DeleteRoom">
+                <input type="hidden" name="roomId" value="@room.RoomId" />
+                <button type="submit" class="btn btn-danger">Slet</button>
+            </form>
+        </td>
     </tr>
     }
     </tbody>

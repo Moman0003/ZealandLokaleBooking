@@ -22,6 +22,7 @@
 
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Views\Student\StudentDashboard.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Teacher\TeacherDashboard.cshtml" />
     </ItemGroup>
 
 </Project>

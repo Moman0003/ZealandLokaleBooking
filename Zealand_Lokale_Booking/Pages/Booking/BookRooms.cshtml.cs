@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using ZealandLokaleBooking.Data;
 using ZealandLokaleBooking.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace Zealand_Lokale_Booking.Pages.Booking
 {
@@ -14,24 +15,43 @@ namespace Zealand_Lokale_Booking.Pages.Booking
             _context = context;
         }
 
-        public List<Room> AvailableRooms { get; set; } = new List<Room>();
+        public List<Room> Rooms { get; set; }
 
         public void OnGet()
         {
-            // Hent alle ledige lokaler
-            AvailableRooms = _context.Rooms.Where(r => !r.IsBooked).ToList();
+            // Fetch all rooms
+            Rooms = _context.Rooms.ToList();
         }
 
-        public IActionResult OnPost(int RoomId)
+        public IActionResult OnPostBookRoom(int roomId)
         {
-            var room = _context.Rooms.FirstOrDefault(r => r.RoomId == RoomId);
-            if (room != null)
+            var room = _context.Rooms.FirstOrDefault(r => r.RoomId == roomId);
+
+            if (room != null && !room.IsBooked)
             {
                 room.IsBooked = true;
+
+                // Tildel brugeren, der bookede lokalet
+                room.BookedByUserId = _context.Users
+                    .FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
+
+                // Valider booking baseret på type
+                if (room.RoomType == "Klasselokale")
+                {
+                    // Logik for at booke hele dagen (fx fra 8-16)
+                }
+                else if (room.RoomType == "Gruppelokale")
+                {
+                    // Logik for at begrænse booking til 3 timer
+                }
+
                 _context.SaveChanges();
             }
 
-            return RedirectToPage("/Booking/BookRooms");
+            return RedirectToPage(); // Genindlæs siden efter booking
         }
+        
+        
+        
     }
 }
