@@ -10,7 +10,12 @@
 <body>
 <nav class="navbar navbar-expand-lg" style="background-color: #fff488;">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="/">
+        <a class="navbar-brand d-flex align-items-center" href="@(
+        User.Identity != null && User.Identity.IsAuthenticated
+        ? (User.Claims.FirstOrDefault(c => c.Type == "role")?.Value == "Student"
+        ? "/StudentDashboard"
+        : "/TeacherDashboard")
+        : "/")">
             <img src="/images/Zealand_Logo.png" alt="Zealand Logo" style="height: 40px; margin-right: 10px;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,40 +25,39 @@
             <ul class="navbar-nav me-auto">
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
-                    // Hent brugerens rolle - tilpas denne logik
-                    var userRole = User.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
+                var userRole = User.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
 
-                    if (userRole == "Student")
-                    {
-                        <!-- Hvis brugeren er en studerende -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Booking/BookRooms">Book Lokaler</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Booking/MyRooms">Mine Lokaler</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Account/Profile">Min Profil</a>
-                        </li>
-                    }
-                    else if (userRole == "Teacher")
-                    {
-                        <!-- Hvis brugeren er en underviser -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Teacher/Schedule">Undervisningsplan</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Teacher/ManageRooms">Administrer Lokaler</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <!-- Hvis rollen ikke er genkendt -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Ukendt Rolle</a>
-                        </li>
-                    }
+                if (userRole == "Student")
+                {
+                <!-- Menu for elev -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/Booking/BookRooms">Book Lokaler</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Booking/MyRooms">Mine Lokaler</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Account/Profile">Min Profil</a>
+                </li>
                 }
+                else if (userRole == "Teacher")
+                {
+                <!-- Menu for lærer -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/Booking/BookRooms">Book Lokaler</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Booking/MyRooms">Mine Lokaler</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Teacher/ManageRooms">Administrer Lokaler</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Account/Profile">Min Profil</a>
+                </li>
+                }
+                }
+               
                 else
                 {
                     <!-- Hvis brugeren ikke er logget ind -->
@@ -108,16 +112,24 @@
             <div class="modal-body">
                 <form method="post" action="/Account/Register">
                     <div class="mb-3">
-                        <label for="Name" class="form-label">Navn</label>
-                        <input type="text" class="form-control" id="Name" name="Name" required />
+                        <label for="registerFirstName" class="form-label">Fornavn</label>
+                        <input type="text" class="form-control" id="registerFirstName" name="FirstName" required />
                     </div>
                     <div class="mb-3">
-                        <label for="Email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="Email" name="Email" required />
+                        <label for="registerLastName" class="form-label">Efternavn</label>
+                        <input type="text" class="form-control" id="registerLastName" name="LastName" required />
                     </div>
                     <div class="mb-3">
-                        <label for="Password" class="form-label">Adgangskode</label>
-                        <input type="password" class="form-control" id="Password" name="Password" required />
+                        <label for="registerEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="registerEmail" name="Email" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="registerPhoneNumber" class="form-label">Tlfnr</label>
+                        <input type="tel" class="form-control" id="registerPhoneNumber" name="PhoneNumber" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="registerPassword" class="form-label">Adgangskode</label>
+                        <input type="password" class="form-control" id="registerPassword" name="Password" required />
                     </div>
                     <button type="submit" class="btn btn-primary">Opret Bruger</button>
                 </form>
@@ -125,6 +137,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog">

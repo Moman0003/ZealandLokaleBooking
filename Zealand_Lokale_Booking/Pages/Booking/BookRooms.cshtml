@@ -1,36 +1,81 @@
 @page
 @model Zealand_Lokale_Booking.Pages.Booking.BookRoomsModel
 @{
-ViewData["Title"] = "Book Lokaler";
-Layout = "_Layout";
+    ViewData["Title"] = "Book Lokaler";
+    Layout = "_Layout";
 }
 
 <h1>Book Lokaler</h1>
-<p>Vælg et ledigt lokale nedenfor:</p>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Lokale</th>
-        <th>Kapacitet</th>
-        <th>Type</th>
-        <th>Handling</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var room in Model.AvailableRooms)
-    {
-    <tr>
-        <td>@room.RoomName</td>
-        <td>@room.Capacity</td>
-        <td>@room.RoomType</td>
-        <td>
-            <form method="post" action="/Booking/BookRooms">
-                <input type="hidden" name="RoomId" value="@room.RoomId" />
-                <button type="submit" class="btn btn-primary">Book</button>
-            </form>
-        </td>
-    </tr>
-    }
-    </tbody>
-</table>
+<div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Lokale Navn</th>
+                <th>Lokale Type</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var room in Model.Rooms)
+            {
+                <tr>
+                    <td>@room.RoomName</td>
+                    <td>@room.RoomType</td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#roomModal-@room.RoomId">
+                            Se mere info
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@foreach (var room in Model.Rooms)
+{
+    <div class="modal fade" id="roomModal-@room.RoomId" tabindex="-1" aria-labelledby="roomModalLabel-@room.RoomId" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="roomModalLabel-@room.RoomId">@room.RoomName - Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Kapacitet:</strong> @room.Capacity</p>
+                    <p><strong>Type:</strong> @room.RoomType</p>
+                    <p><strong>Status:</strong> @(room.IsBooked ? "Booket" : "Tilgængelig")</p>
+                    <p>
+                        <strong>Bookbar Tid:</strong>
+                        @if (room.RoomType == "Klasselokale")
+                        {
+                        <span>08:00 - 16:00 (fuld skoledag)</span>
+                        }
+                        else if (room.RoomType == "Gruppelokale")
+                        {
+                        <span>3 timer pr. booking</span>
+                        }
+                        else
+                        {
+                        <span>Ikke angivet</span>
+                        }
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    @if (!room.IsBooked)
+                    {
+                        <form method="post" asp-page-handler="BookRoom">
+                            <input type="hidden" name="roomId" value="@room.RoomId" />
+                            <button type="submit" class="btn btn-success">Book Lokale</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary" disabled>Allerede Booket</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
