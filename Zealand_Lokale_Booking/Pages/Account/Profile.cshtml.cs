@@ -41,6 +41,11 @@ namespace Zealand_Lokale_Booking.Pages.Account
             {
                 Console.WriteLine("Bruger er ikke logget ind.");
             }
+
+            {
+                ViewData["ShowBackButton"] = "true";
+                ViewData["BackUrl"] = "/StudentDashboard";
+            }
         }
     }
 }

@@ -21,6 +21,11 @@ namespace Zealand_Lokale_Booking.Pages.Booking
         {
             // Fetch all rooms
             Rooms = _context.Rooms.ToList();
+            
+            {
+                ViewData["ShowBackButton"] = "true";
+                ViewData["BackUrl"] = "/StudentDashboard";
+            }
         }
 
         public IActionResult OnPostBookRoom(int roomId)

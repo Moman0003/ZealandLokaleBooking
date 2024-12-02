@@ -6,6 +6,7 @@ public class Contact : PageModel
 {
     public void OnGet()
     {
-        
+        ViewData["ShowBackButton"] = "true";
+        ViewData["BackUrl"] = "/StudentDashboard";
     }
 }

@@ -8,6 +8,8 @@ namespace ZealandLokaleBooking.Pages
     {
         public void OnGet()
         {
+            ViewData["ShowBackButton"] = "true";
+            ViewData["BackUrl"] = "/StudentDashboard";
         }
     }
 }

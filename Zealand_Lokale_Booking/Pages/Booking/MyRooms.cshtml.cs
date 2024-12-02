@@ -37,6 +37,11 @@ namespace Zealand_Lokale_Booking.Pages.Booking
             {
                 BookedRooms = new List<Room>(); // No rooms if user is not found
             }
+
+            {
+                ViewData["ShowBackButton"] = "true";
+                ViewData["BackUrl"] = "/StudentDashboard";
+            }
         }
 
         public IActionResult OnPostDeleteRoom(int roomId)

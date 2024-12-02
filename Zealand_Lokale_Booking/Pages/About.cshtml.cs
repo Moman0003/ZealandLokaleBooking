@@ -6,6 +6,7 @@ public class About : PageModel
 {
     public void OnGet()
     {
-        
+        ViewData["ShowBackButton"] = "true";
+        ViewData["BackUrl"] = "/StudentDashboard";
     }
 }
