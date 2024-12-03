@@ -17,5 +17,8 @@ namespace ZealandLokaleBooking.Models
         // Tilføj de manglende properties
         public bool IsDeleted { get; set; } = false;  // Initialiserer som false
         public bool IsActive { get; set; } = true;    // Initialiserer som true
+        
+        public string Status { get; set; } = "Active"; // Default status
+        public int? CancelledBy { get; set; } // Underviseren der annullerede
     }
 }

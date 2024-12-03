@@ -1,4 +1,5 @@
 @page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Zealand_Lokale_Booking.Pages.Booking.BookRoomsModel
 @{
     ViewData["Title"] = "Book Lokaler";
@@ -13,7 +14,7 @@
             <tr>
                 <th>Lokale Navn</th>
                 <th>Lokale Type</th>
-                <th></th>
+                <th>Handling</th>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +34,7 @@
     </table>
 </div>
 
+<!-- Modal til at vise information om lokaler -->
 @foreach (var room in Model.Rooms)
 {
     <div class="modal fade" id="roomModal-@room.RoomId" tabindex="-1" aria-labelledby="roomModalLabel-@room.RoomId" aria-hidden="true">
@@ -50,15 +52,15 @@
                         <strong>Bookbar Tid:</strong>
                         @if (room.RoomType == "Klasselokale")
                         {
-                        <span>08:00 - 16:00 (fuld skoledag)</span>
+                            <span>08:00 - 16:00 (fuld skoledag)</span>
                         }
                         else if (room.RoomType == "Gruppelokale")
                         {
-                        <span>3 timer pr. booking</span>
+                            <span>3 timer pr. booking</span>
                         }
                         else
                         {
-                        <span>Ikke angivet</span>
+                            <span>Ikke angivet</span>
                         }
                     </p>
                 </div>
@@ -79,3 +81,38 @@
         </div>
     </div>
 }
+<!-- Vis bookinger -->
+<h2>Bookinger</h2>
+<div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Lokale ID</th>
+                <th>Starttid</th>
+                <th>Sluttid</th>
+                <th>Status</th>
+                <th>Handling</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var booking in Model.Bookings)
+            {
+                <tr>
+                    <td>@booking.RoomId</td>
+                    <td>@booking.StartTime.ToString("dd-MM-yyyy HH:mm")</td>
+                    <td>@booking.EndTime.ToString("dd-MM-yyyy HH:mm")</td>
+                    <td>@booking.Status</td>
+                    <td>
+                        @if (booking.Status == "Active")
+                        {
+                            <form method="post" asp-page-handler="CancelBooking">
+                                <input type="hidden" name="bookingId" value="@booking.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Annuller</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
