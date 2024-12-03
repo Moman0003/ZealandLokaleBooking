@@ -27,21 +27,22 @@ namespace ZealandLokaleBooking.Controllers
 
         // POST: /Account/Login
         [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
             // Find brugeren i databasen
             var user = _context.Users.Include(u => u.Role)
                 .FirstOrDefault(u => u.Email == email && u.Password == password);
 
-            Console.WriteLine($"User: {user?.FirstName} {user?.LastName}, Role: {user?.Role?.RoleName}");
+            Console.WriteLine($"Login forsøg: Email = {email}, Rolle = {user?.Role?.RoleName}");
 
             if (user != null)
             {
                 // Opret brugerens claims
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.Email), // Sæt email som Identity.Name
-                    new Claim("role", user.Role.RoleName)  // Brug rollen fra databasen
+                    new Claim(ClaimTypes.Name, user.Email), // Email som Name
+                    new Claim("role", user.Role.RoleName)  // Rollen
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -50,20 +51,23 @@ namespace ZealandLokaleBooking.Controllers
                 // Log brugeren ind
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                // Redirect baseret på rollen
+                // Debugger redirect-logik
                 if (user.Role.RoleName == "Student")
                 {
-                    return RedirectToPage("/StudentDashboard"); // Razor Page path
+                    Console.WriteLine("Elev logget ind, omdirigerer til StudentDashboard.");
+                    return RedirectToPage("/StudentDashboard");
                 }
                 else if (user.Role.RoleName == "Teacher")
                 {
-                    return RedirectToPage("/TeacherDashboard"); // Omdirigér lærere til TeacherDashboard
+                    Console.WriteLine("Lærer logget ind, omdirigerer til TeacherDashboard.");
+                    return RedirectToPage("/TeacherDashboard");
                 }
             }
 
             // Hvis login fejler
+            Console.WriteLine("Login mislykkedes. Ugyldig email eller adgangskode.");
             ViewBag.ErrorMessage = "Ugyldig email eller adgangskode.";
-            return View(); // Forbliv på login-siden
+            return View();
         }
 
         

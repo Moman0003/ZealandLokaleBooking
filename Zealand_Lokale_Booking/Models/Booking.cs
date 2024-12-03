@@ -2,7 +2,7 @@ namespace ZealandLokaleBooking.Models
 {
     public class Booking
     {
-        public int BookingId { get; set; }
+        public int Id { get; set; } // Brug 'Id' i stedet for 'BookingId'
         public int RoomId { get; set; }
         public int UserId { get; set; }
         public DateTime StartTime { get; set; }

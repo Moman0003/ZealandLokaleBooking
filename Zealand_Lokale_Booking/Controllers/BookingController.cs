@@ -17,7 +17,7 @@ namespace ZealandLokaleBooking.Controllers
         // GET: Booking/ConfirmDelete/5
         public IActionResult ConfirmDelete(int id)
         {
-            var booking = _context.Bookings.Where(b => b.BookingId == id).FirstOrDefault();
+            var booking = _context.Bookings.Where(b => b.Id == id).FirstOrDefault();
             if (booking == null)
             {
                 return NotFound();
@@ -30,7 +30,7 @@ namespace ZealandLokaleBooking.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var booking = _context.Bookings.Where(b => b.BookingId == id).FirstOrDefault();
+            var booking = _context.Bookings.Where(b => b.Id == id).FirstOrDefault();
             if (booking == null)
             {
                 return NotFound();
