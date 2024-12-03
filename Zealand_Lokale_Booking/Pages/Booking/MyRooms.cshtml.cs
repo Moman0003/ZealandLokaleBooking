@@ -43,13 +43,15 @@ namespace Zealand_Lokale_Booking.Pages.Booking
         {
             var room = _context.Rooms.FirstOrDefault(r => r.RoomId == roomId);
 
-            if (room != null && room.IsBooked)
+            if (room != null)
             {
-                room.IsBooked = false; // Markér lokalet som ledigt
+                room.IsBooked = false; // Mark the room as available
+                room.BookedByUserId = null; // Clear the booking
+
                 _context.SaveChanges();
             }
 
-            return RedirectToPage(); // Genindlæs siden
+            return RedirectToPage(); // Reload the page after deletion
         }
     }
 }

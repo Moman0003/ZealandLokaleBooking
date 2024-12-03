@@ -13,5 +13,9 @@ namespace ZealandLokaleBooking.Models
 
         // Ny property for dato
         public DateTime Date => StartTime.Date; // Udleder kun datoen fra StartTime
+        
+        // Tilføj de manglende properties
+        public bool IsDeleted { get; set; } = false;  // Initialiserer som false
+        public bool IsActive { get; set; } = true;    // Initialiserer som true
     }
 }
