@@ -40,6 +40,17 @@ namespace ZealandLokaleBooking.Controllers
                 return RedirectToPage("/Booking/BookRooms");
             }
 
+            // Tjek om brugeren allerede har 3 aktive bookinger
+            var activeBookingsCount = _context.Bookings
+                .Where(b => b.UserId == user.UserId && b.IsActive && !b.IsDeleted)
+                .Count();
+
+            if (activeBookingsCount >= 3)
+            {
+                TempData["ErrorMessage"] = "Du kan kun have 3 aktive bookinger ad gangen.";
+                return RedirectToPage("/Booking/BookRooms");
+            }
+
             // Opret en ny booking
             var booking = new Booking
             {
