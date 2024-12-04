@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/ismailmagid/Desktop/ZealandLokaleBooking/Zealand_Lokale_Booking/Zealand_Lokale_Booking.csproj": {}
+    "/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Zealand_Lokale_Booking.csproj": {}
   },
   "projects": {
-    "/Users/ismailmagid/Desktop/ZealandLokaleBooking/Zealand_Lokale_Booking/Zealand_Lokale_Booking.csproj": {
+    "/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Zealand_Lokale_Booking.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ismailmagid/Desktop/ZealandLokaleBooking/Zealand_Lokale_Booking/Zealand_Lokale_Booking.csproj",
+        "projectUniqueName": "/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Zealand_Lokale_Booking.csproj",
         "projectName": "Zealand_Lokale_Booking",
-        "projectPath": "/Users/ismailmagid/Desktop/ZealandLokaleBooking/Zealand_Lokale_Booking/Zealand_Lokale_Booking.csproj",
-        "packagesPath": "/Users/ismailmagid/.nuget/packages/",
-        "outputPath": "/Users/ismailmagid/Desktop/ZealandLokaleBooking/Zealand_Lokale_Booking/obj/",
+        "projectPath": "/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Zealand_Lokale_Booking.csproj",
+        "packagesPath": "/Users/momans/.nuget/packages/",
+        "outputPath": "/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/ismailmagid/.nuget/NuGet/NuGet.Config"
+          "/Users/momans/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,11 +32,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -81,7 +76,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/x64/sdk/8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/x64/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
