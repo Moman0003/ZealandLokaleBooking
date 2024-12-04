@@ -1,61 +1,76 @@
 @page
 @model Zealand_Lokale_Booking.Pages.Booking.MyRoomsModel
 @{
-ViewData["Title"] = "Mine Lokaler";
-Layout = "_Layout";
+    ViewData["Title"] = "Mine Lokaler";
+    Layout = "_Layout";
 }
 
 <h1>Mine Lokaler</h1>
 <p>Her er en liste over de lokaler, du har booket:</p>
 
+<!-- Vis succes- eller fejlmeddelelser -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <table class="table">
     <thead>
-    <tr>
-        <th>Lokale</th>
-        <th>Kapacitet</th>
-        <th>Type</th>
-        <th>Handling</th>
-    </tr>
+        <tr>
+            <th>Lokale</th>
+            <th>Kapacitet</th>
+            <th>Type</th>
+            <th>Handling</th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var room in Model.BookedRooms)
-    {
-    <tr>
-        <td>@room.RoomName</td>
-        <td>@room.Capacity</td>
-        <td>@room.RoomType</td>
-        <td>
-            <!-- Knap der åbner modal -->
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@room.RoomId">
-                Slet
-            </button>
-        </td>
-    </tr>
-    }
+        @foreach (var room in Model.BookedRooms)
+        {
+            <tr>
+                <td>@room.RoomName</td>
+                <td>@room.Capacity</td>
+                <td>@room.RoomType</td>
+                <td>
+                    <!-- Knap der åbner modal -->
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@room.RoomId">
+                        Slet
+                    </button>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
 <!-- Modal for sletning -->
 @foreach (var room in Model.BookedRooms)
 {
-<div class="modal fade" id="deleteModal-@room.RoomId" tabindex="-1" aria-labelledby="deleteModalLabel-@room.RoomId" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel-@room.RoomId">Bekræft Sletning af @room.RoomName</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Er du sikker på, at du vil slette booking af @room.RoomName?
-            </div>
-            <div class="modal-footer">
-                <form method="post" asp-page-handler="DeleteRoom">
-                    <input type="hidden" name="roomId" value="@room.RoomId" />
-                    <button type="submit" class="btn btn-danger">Bekræft Sletning</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuller</button>
-                </form>
+    <div class="modal fade" id="deleteModal-@room.RoomId" tabindex="-1" aria-labelledby="deleteModalLabel-@room.RoomId" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel-@room.RoomId">Bekræft Sletning af @room.RoomName</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Er du sikker på, at du vil slette booking af @room.RoomName?
+                </div>
+                <div class="modal-footer">
+                    <form method="post" asp-page-handler="DeleteRoom">
+                        <input type="hidden" name="roomId" value="@room.RoomId" />
+                        <button type="submit" class="btn btn-danger">Bekræft Sletning</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuller</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 }

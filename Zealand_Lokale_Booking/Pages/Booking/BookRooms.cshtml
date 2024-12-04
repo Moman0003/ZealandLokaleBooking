@@ -7,8 +7,20 @@
 
 <h1>Book Lokaler</h1>
 
+<!-- Vis succes- eller fejlmeddelelser -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
 
-
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
 
 <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
     <table class="table table-striped">
