@@ -3,25 +3,24 @@ using ZealandLokaleBooking.Data;
 using ZealandLokaleBooking.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using System.Linq; 
 using System.Collections.Generic;  // Sørg for at importere for at bruge List<> og andre samlinger
 using System;
 using System.Text.RegularExpressions;
-
 
 namespace Zealand_Lokale_Booking.Pages.Booking
 {
     public class BookRoomsModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+
         // Constructor for at injicere ApplicationDbContext
         public BookRoomsModel(ApplicationDbContext context)
         {
             _context = context;
         }
+
         // Liste af lokaler, som vises på siden
         public List<Room> Rooms { get; set; }
-        
 
         public void OnGet()
         {
@@ -32,6 +31,7 @@ namespace Zealand_Lokale_Booking.Pages.Booking
                 .ThenBy(r => r.RoomName) // Sort by RoomName if numbers are the same
                 .ToList();
         }
+
         // Håndterer rum booking
         public IActionResult OnPostBookRoom(int roomId)
         {
@@ -47,7 +47,6 @@ namespace Zealand_Lokale_Booking.Pages.Booking
                 var user = _context.Users.FirstOrDefault(u => u.Email == userEmail);
                 if (user != null)
                 {
-                    
                     room.BookedByUserId = user.UserId;
 
                     // Logic for booking based on room type
@@ -62,10 +61,17 @@ namespace Zealand_Lokale_Booking.Pages.Booking
 
                     // Save booking and room state
                     _context.SaveChanges();
+                    
+                    // Set success message in TempData to display to user
+                    TempData["SuccessMessage"] = $"Lokalet '{room.RoomName}' blev booket succesfuldt!";
+                    
                     return RedirectToPage(); // Refresh page after booking
                 }
             }
-            return RedirectToPage(); // Redirect back if there is no room or user
+            
+            // Redirect back if no room or user found
+            TempData["ErrorMessage"] = "Lokalet kunne ikke bookes.";
+            return RedirectToPage(); 
         }
     }
 }
