@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ZealandLokaleBooking.Data;
+using ZealandLokaleBooking.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Registrér EmailService som en service
+builder.Services.AddScoped<EmailService>();
 
 // Tilføj autentificering
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

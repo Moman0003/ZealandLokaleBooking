@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
 <html lang="da">
 <head>
     <meta charset="utf-8" />
@@ -29,7 +30,7 @@
 
                 if (userRole == "Student")
                 {
-                <!-- Menu for elev -->
+                <!-- Menu for studerende -->
                 <li class="nav-item">
                     <a class="nav-link" href="/Booking/BookRooms">Book Lokaler</a>
                 </li>
@@ -42,7 +43,7 @@
                 }
                 else if (userRole == "Teacher")
                 {
-                <!-- Menu for lærer -->
+                <!-- Menu for lærere -->
                 <li class="nav-item">
                     <a class="nav-link" href="/Booking/BookRooms">Book Lokaler</a>
                 </li>
@@ -50,39 +51,38 @@
                     <a class="nav-link" href="/Booking/MyRooms">Mine Lokaler</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Teacher/ManageRooms">Administrer Lokaler</a>
+                    <a class="nav-link" href="/Booking/ManageRooms">Administrer Lokaler</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/Account/Profile">Min Profil</a>
                 </li>
                 }
                 }
-               
                 else
                 {
-                    <!-- Hvis brugeren ikke er logget ind -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Forside</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Contact">Kontakt</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/About">Om Os</a>
-                    </li>
+                <!-- Menu for ikke-loggede brugere -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Forside</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Contact">Kontakt</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/About">Om Os</a>
+                </li>
                 }
             </ul>
             <div class="navbar-buttons d-flex gap-2">
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
-                    <!-- Hvis brugeren er logget ind -->
-                    <a href="/Account/Logout" class="btn btn-secondary">Log Ud</a>
+                <!-- Hvis brugeren er logget ind -->
+                <a href="/Account/Logout" class="btn btn-secondary">Log Ud</a>
                 }
                 else
                 {
-                    <!-- Hvis brugeren ikke er logget ind -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Opret Bruger</button>
-                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                <!-- Hvis brugeren ikke er logget ind -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Opret Bruger</button>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
                 }
             </div>
         </div>
@@ -137,7 +137,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog">

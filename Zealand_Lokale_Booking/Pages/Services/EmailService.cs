@@ -1,32 +1,43 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.Configuration;
+using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace ZealandLokaleBooking.Services
 {
-    public static class EmailService
+    public class EmailService
     {
-        public static async Task SendEmailAsync(string to, string subject, string body)
+        private readonly IConfiguration _configuration;
+
+        public EmailService(IConfiguration configuration)
         {
-            // Indsæt dine SMTP-oplysninger her
-            var smtpClient = new SmtpClient("smtp.your-email-provider.com")
+            _configuration = configuration;
+        }
+
+        public async Task SendEmailAsync(string toEmail, string subject, string body)
+        {
+            var smtpSettings = _configuration.GetSection("SmtpSettings");
+            string host = smtpSettings["Host"];
+            int port = int.Parse(smtpSettings["Port"]);
+            string username = smtpSettings["Username"];
+            string password = smtpSettings["Password"];
+
+            using (var client = new SmtpClient(host, port))
             {
-                Port = 587, // Typisk port for SMTP med TLS
-                Credentials = new NetworkCredential("your-email@example.com", "your-email-password"),
-                EnableSsl = true,
-            };
+                client.Credentials = new NetworkCredential(username, password);
+                client.EnableSsl = true;
 
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress("your-email@example.com", "Zealand Lokale Booking"),
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = false, // Indstil til true, hvis du bruger HTML i emailen
-            };
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(username),
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = false
+                };
+                mailMessage.To.Add(toEmail);
 
-            mailMessage.To.Add(to);
-
-            await smtpClient.SendMailAsync(mailMessage);
+                await client.SendMailAsync(mailMessage);
+            }
         }
     }
 }

@@ -8,13 +8,28 @@
 
 <h1>Book Lokaler</h1>
 
+<!-- Vis succes- eller fejlmeddelelser -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Lokale Navn</th>
                 <th>Lokale Type</th>
-                <th>Handling</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -34,7 +49,6 @@
     </table>
 </div>
 
-<!-- Modal til at vise information om lokaler -->
 @foreach (var room in Model.Rooms)
 {
     <div class="modal fade" id="roomModal-@room.RoomId" tabindex="-1" aria-labelledby="roomModalLabel-@room.RoomId" aria-hidden="true">
@@ -67,52 +81,19 @@
                 <div class="modal-footer">
                     @if (!room.IsBooked)
                     {
-                        <form method="post" asp-page-handler="BookRoom">
-                            <input type="hidden" name="roomId" value="@room.RoomId" />
-                            <button type="submit" class="btn btn-success">Book Lokale</button>
-                        </form>
+                    <form method="post" asp-page-handler="BookRoom">
+                        <input type="hidden" name="roomId" value="@room.RoomId" />
+                        <button type="submit" class="btn btn-success">Book Lokale</button>
+                    </form>
                     }
                     else
                     {
-                        <button class="btn btn-secondary" disabled>Allerede Booket</button>
+                    <button class="btn btn-secondary" disabled>Allerede Booket</button>
                     }
                 </div>
             </div>
         </div>
     </div>
 }
-<!-- Vis bookinger -->
-<h2>Bookinger</h2>
-<div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Lokale ID</th>
-                <th>Starttid</th>
-                <th>Sluttid</th>
-                <th>Status</th>
-                <th>Handling</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var booking in Model.Bookings)
-            {
-                <tr>
-                    <td>@booking.RoomId</td>
-                    <td>@booking.StartTime.ToString("dd-MM-yyyy HH:mm")</td>
-                    <td>@booking.EndTime.ToString("dd-MM-yyyy HH:mm")</td>
-                    <td>@booking.Status</td>
-                    <td>
-                        @if (booking.Status == "Active")
-                        {
-                            <form method="post" asp-page-handler="CancelBooking">
-                                <input type="hidden" name="bookingId" value="@booking.Id" />
-                                <button type="submit" class="btn btn-danger btn-sm">Annuller</button>
-                            </form>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+
+

@@ -1,0 +1,65 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Zealand_Lokale_Booking.Pages.Booking.ManageRoomsModel
+@{
+    ViewData["Title"] = "Administrer Lokaler";
+}
+
+<h1>Administrer Lokaler</h1>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div class="btn-group mb-3" role="group" aria-label="Filter lokaler">
+    <a class="btn btn-primary @(Model.Filter == "all" ? "active" : "")" href="?filter=all">Alle Lokaler</a>
+    <a class="btn btn-primary @(Model.Filter == "booked" ? "active" : "")" href="?filter=booked">Bookede Lokaler</a>
+    <a class="btn btn-primary @(Model.Filter == "available" ? "active" : "")" href="?filter=available">Ledige Lokaler</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Lokale</th>
+            <th>Type</th>
+            <th>Kapacitet</th>
+            <th>Status</th>
+            <th>Booket Af</th>
+            <th>Handling</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var room in Model.Rooms)
+        {
+            <tr>
+                <td>@room.RoomName</td>
+                <td>@room.RoomType</td>
+                <td>@room.Capacity</td>
+                <td>@(room.IsBooked ? "Booket" : "Ledigt")</td>
+                <td>@(room.IsBooked ? room.BookedByUser?.FirstName ?? "Ukendt" : "-")</td>
+                <td>
+                    @if (room.IsBooked)
+                    {
+                        <form method="post" asp-page-handler="CancelBooking">
+                            <input type="hidden" name="roomId" value="@room.RoomId" />
+                            <button type="submit" class="btn btn-danger btn-sm">Annuller Booking</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary btn-sm" disabled>Ingen Handling</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
