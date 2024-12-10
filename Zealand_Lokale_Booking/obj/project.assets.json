@@ -5511,11 +5511,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBooking1\\Zealand_Lokale_Booking\\Zealand_Lokale_Booking.csproj",
+      "projectUniqueName": "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBookingFake\\Zealand_Lokale_Booking\\Zealand_Lokale_Booking.csproj",
       "projectName": "Zealand_Lokale_Booking",
-      "projectPath": "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBooking1\\Zealand_Lokale_Booking\\Zealand_Lokale_Booking.csproj",
+      "projectPath": "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBookingFake\\Zealand_Lokale_Booking\\Zealand_Lokale_Booking.csproj",
       "packagesPath": "C:\\Users\\Sebas\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBooking1\\Zealand_Lokale_Booking\\obj\\",
+      "outputPath": "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBookingFake\\Zealand_Lokale_Booking\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

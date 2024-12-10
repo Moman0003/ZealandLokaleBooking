@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "di3cTDUj8MY=",
+  "dgSpecHash": "FlttNeY2scU=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBooking1\\Zealand_Lokale_Booking\\Zealand_Lokale_Booking.csproj",
+  "projectFilePath": "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBookingFake\\Zealand_Lokale_Booking\\Zealand_Lokale_Booking.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Sebas\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Sebas\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
