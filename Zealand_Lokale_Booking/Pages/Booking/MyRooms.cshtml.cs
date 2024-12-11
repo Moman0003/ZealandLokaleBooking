@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-
+using System.Collections.Generic; // Tilføj dette for at kunne bruge List<T>
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ZealandLokaleBooking.Data;
 using ZealandLokaleBooking.Models;
@@ -45,10 +45,19 @@ namespace Zealand_Lokale_Booking.Pages.Booking
 
             if (room != null)
             {
-                room.IsBooked = false; // Mark the room as available
+                // Mark room as available
+                room.IsBooked = false;
                 room.BookedByUserId = null; // Clear the booking
 
                 _context.SaveChanges();
+
+                // Add success message to TempData
+                TempData["SuccessMessage"] = $"Lokale {room.RoomName} er blevet slettet.";
+            }
+            else
+            {
+                // Add error message to TempData
+                TempData["ErrorMessage"] = "Der opstod en fejl under sletning af lokalet.";
             }
 
             return RedirectToPage(); // Reload the page after deletion

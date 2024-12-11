@@ -1,0 +1,95 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Zealand_Lokale_Booking
+build_property.RootNamespace = Zealand_Lokale_Booking
+build_property.ProjectDir = /Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking
+build_property._RazorSourceGeneratorDebug = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/About.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQWJvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/Account/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQWNjb3VudC9Qcm9maWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/Booking/BookRooms.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQm9va2luZy9Cb29rUm9vbXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/Booking/MyRooms.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQm9va2luZy9NeVJvb21zLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/Contact.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29udGFjdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUHJpdmFjeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/StudentDashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU3R1ZGVudERhc2hib2FyZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/TeacherDashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVGVhY2hlckRhc2hib2FyZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Mb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Views/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9SZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Views/Room/AvailableRooms.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUm9vbS9BdmFpbGFibGVSb29tcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-14wzddjrgy
