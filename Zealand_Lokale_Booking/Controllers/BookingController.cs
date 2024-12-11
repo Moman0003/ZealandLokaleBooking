@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ZealandLokaleBooking.Data;
 using ZealandLokaleBooking.Models;
+using System;
 using System.Linq;
 
 namespace ZealandLokaleBooking.Controllers
@@ -13,7 +14,7 @@ namespace ZealandLokaleBooking.Controllers
         {
             _context = context;
         }
-        
+
         // POST: Booking/BookRoom
         [HttpPost]
         public IActionResult BookRoom(int roomId, DateTime startTime, DateTime endTime)
@@ -58,7 +59,6 @@ namespace ZealandLokaleBooking.Controllers
                 UserId = user.UserId,
                 StartTime = startTime,
                 EndTime = endTime,
-                
                 IsDeleted = false,
                 IsActive = true
             };
@@ -70,7 +70,7 @@ namespace ZealandLokaleBooking.Controllers
 
             return RedirectToPage("/StudentDashboard"); // Omdirigér efter booking
         }
-        
+
         // GET: Booking/ConfirmDelete/5
         public IActionResult ConfirmDelete(int id)
         {
@@ -106,6 +106,24 @@ namespace ZealandLokaleBooking.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index", "StudentDashboard"); // Redirect til student dashboard
+        }
+
+        // GET: Booking/FilterByDate
+        [HttpGet("filter-by-date")]
+        public IActionResult FilterBookingsByDate(DateTime date)
+        {
+            var bookings = _context.Bookings
+                                   .Where(b => b.StartTime.Date == date.Date)
+                                   .Select(b => new
+                                   {
+                                       b.Id,
+                                       b.Room.RoomName,
+                                       b.StartTime,
+                                       b.EndTime
+                                   })
+                                   .ToList();
+
+            return Ok(bookings);
         }
     }
 }

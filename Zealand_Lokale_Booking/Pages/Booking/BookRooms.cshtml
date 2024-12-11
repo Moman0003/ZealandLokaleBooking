@@ -7,21 +7,29 @@
 
 <h1>Book Lokaler</h1>
 
+<!-- Filter-funktion -->
+<div class="mb-3">
+    <label for="filterDate" class="form-label">Filtrer efter dato:</label>
+    <input type="date" id="filterDate" class="form-control" onchange="FilterBookings()" />
+</div>
+
 <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>Lokale Navn</th>
                 <th>Lokale Type</th>
+                <th>Status</th>
                 <th></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="roomList">
             @foreach (var room in Model.Rooms)
             {
                 <tr>
                     <td>@room.RoomName</td>
                     <td>@room.RoomType</td>
+                    <td>@(room.IsBooked ? "Booket" : "Tilgængelig")</td>
                     <td>
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#roomModal-@room.RoomId">
                             Se mere info
@@ -50,15 +58,15 @@
                         <strong>Bookbar Tid:</strong>
                         @if (room.RoomType == "Klasselokale")
                         {
-                        <span>08:00 - 16:00 (fuld skoledag)</span>
+                            <span>08:00 - 16:00 (fuld skoledag)</span>
                         }
                         else if (room.RoomType == "Gruppelokale")
                         {
-                        <span>3 timer pr. booking</span>
+                            <span>3 timer pr. booking</span>
                         }
                         else
                         {
-                        <span>Ikke angivet</span>
+                            <span>Ikke angivet</span>
                         }
                     </p>
                 </div>
@@ -78,4 +86,31 @@
             </div>
         </div>
     </div>
+}
+
+    <script>
+        async function FilterBookings() {
+            const filterDate = document.getElementById('filterDate').value;
+            const response = await fetch(`/api/booking/filter-by-date?date=${filterDate}`);
+            const bookings = await response.json();
+
+            const roomList = document.getElementById('roomList');
+            roomList.innerHTML = '';
+
+            bookings.forEach(booking => {
+                const row = `
+                    <tr>
+                        <td>${booking.roomName}</td>
+                        <td>${booking.roomType}</td>
+                        <td>${booking.isBooked ? "Booket" : "Tilgængelig"}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#roomModal-${booking.roomId}">
+                                Se mere info
+                            </button>
+                        </td>
+                    </tr>`;
+                roomList.innerHTML += row;
+            });
+        }
+    </script>
 }
