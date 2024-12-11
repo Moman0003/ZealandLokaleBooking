@@ -5516,6 +5516,7 @@
       "packagesPath": "/Users/momans/.nuget/packages/",
       "outputPath": "/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/obj/",
       "projectStyle": "PackageReference",
+      "UsingMicrosoftNETSdk": false,
       "configFilePaths": [
         "/Users/momans/.nuget/NuGet/NuGet.Config"
       ],
@@ -5535,6 +5536,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
