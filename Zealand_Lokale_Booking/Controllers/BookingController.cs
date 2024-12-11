@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using ZealandLokaleBooking.Data;
 using ZealandLokaleBooking.Models;
 using System.Linq;
+using System; // Tilføj dette for at få adgang til DateTime
 namespace ZealandLokaleBooking.Controllers
+
+    
 {
     public class BookingController : Controller
     {

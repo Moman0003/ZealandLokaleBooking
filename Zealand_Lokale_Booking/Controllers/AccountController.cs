@@ -6,6 +6,10 @@ using ZealandLokaleBooking.Data; // Namespace til ApplicationDbContext
 using ZealandLokaleBooking.Models; // Namespace til User modellen
 using System.Linq;
 using Microsoft.EntityFrameworkCore; // For LINQ
+using System; 
+using System.Threading.Tasks; // Tilføj dette for at kunne bruge Task
+using System.Collections.Generic; // Tilføj dette for at kunne bruge List<T>
+
 
 namespace ZealandLokaleBooking.Controllers
 {

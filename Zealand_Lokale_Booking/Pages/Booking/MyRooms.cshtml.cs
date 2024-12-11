@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-
+using System.Collections.Generic; // Tilføj dette for at kunne bruge List<T>
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ZealandLokaleBooking.Data;
 using ZealandLokaleBooking.Models;
