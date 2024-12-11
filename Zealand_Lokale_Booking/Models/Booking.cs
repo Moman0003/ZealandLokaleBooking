@@ -1,3 +1,5 @@
+using System;
+
 namespace ZealandLokaleBooking.Models
 {
     public class Booking

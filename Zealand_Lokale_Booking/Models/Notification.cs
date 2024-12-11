@@ -1,4 +1,6 @@
-﻿namespace ZealandLokaleBooking.Models
+﻿using System;
+
+namespace ZealandLokaleBooking.Models
 {
     public class Notification
     {

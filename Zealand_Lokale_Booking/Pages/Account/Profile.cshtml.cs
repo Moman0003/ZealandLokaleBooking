@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ZealandLokaleBooking.Data;
 using ZealandLokaleBooking.Models;
+using System;
+
+using System.Linq; // Tilføj dette for at få adgang til ToList() og LINQ
 
 namespace Zealand_Lokale_Booking.Pages.Account
 {

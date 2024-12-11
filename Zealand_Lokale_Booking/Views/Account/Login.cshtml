@@ -1,12 +1,16 @@
 @{
     ViewData["Title"] = "Login";
 }
+
 <h2>Login</h2>
+
+<!-- Hvis der er en fejlmeddelelse, vis den -->
 @if (ViewBag.ErrorMessage != null)
 {
     <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
 }
-<form method="post" action="/Account/Login">
+
+<form method="post" asp-action="Login">
     <div class="mb-3">
         <label for="Email" class="form-label">Email</label>
         <input type="email" class="form-control" id="Email" name="email" required />
@@ -17,6 +21,3 @@
     </div>
     <button type="submit" class="btn btn-primary">Log ind</button>
 </form>
-
-
-
