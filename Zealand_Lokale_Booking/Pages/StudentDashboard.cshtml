@@ -22,34 +22,5 @@ else
     <p>Ingen nye notifikationer.</p>
 }
 
-<h2>Aktive Bookinger</h2>
-@if (Model.Bookings.Any())
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Lokale</th>
-            <th>Starttid</th>
-            <th>Sluttid</th>
-            <th>Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var booking in Model.Bookings)
-        {
-            <tr>
-                <td>@booking.Room.RoomName</td>
-                <td>@booking.StartTime.ToString("dd-MM-yyyy HH:mm")</td>
-                <td>@booking.EndTime.ToString("dd-MM-yyyy HH:mm")</td>
-                <td>@booking.Status</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>Du har ingen aktive bookinger.</p>
-}
 
 
