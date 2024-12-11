@@ -5,5 +5,51 @@
 }
 
 <h1>Student Dashboard</h1>
-<p>Velkommen til dit dashboard, elev!</p>
+<p>Velkommen til dit dashboard, @User.Identity.Name!</p>
+
+@if (Model.Notifications.Any())
+{
+    <h3>Dine notifikationer:</h3>
+    <ul>
+        @foreach (var notification in Model.Notifications)
+        {
+            <li>@notification.Message</li>
+        }
+    </ul>
+}
+else
+{
+    <p>Ingen nye notifikationer.</p>
+}
+
+<h2>Aktive Bookinger</h2>
+@if (Model.Bookings.Any())
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Lokale</th>
+            <th>Starttid</th>
+            <th>Sluttid</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var booking in Model.Bookings)
+        {
+            <tr>
+                <td>@booking.Room.RoomName</td>
+                <td>@booking.StartTime.ToString("dd-MM-yyyy HH:mm")</td>
+                <td>@booking.EndTime.ToString("dd-MM-yyyy HH:mm")</td>
+                <td>@booking.Status</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Du har ingen aktive bookinger.</p>
+}
+
 

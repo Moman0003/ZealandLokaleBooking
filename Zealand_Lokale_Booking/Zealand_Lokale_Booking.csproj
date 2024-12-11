@@ -25,4 +25,14 @@
       <_ContentIncludedByDefault Remove="Views\Teacher\TeacherDashboard.cshtml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Include="obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="obj\Debug\net8.0\apphost" />
+      <Content Include="obj\Debug\net8.0\Zealand_Lokale_Booking.MvcApplicationPartsAssemblyInfo.cache" />
+      <Content Include="obj\Debug\net8.0\Zealand_Lokale_Booking.RazorAssemblyInfo.cache" />
+    </ItemGroup>
+
 </Project>
