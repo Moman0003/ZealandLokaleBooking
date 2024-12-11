@@ -35,4 +35,8 @@
       <Content Include="obj\Debug\net8.0\Zealand_Lokale_Booking.RazorAssemblyInfo.cache" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Include="obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs" />
+    </ItemGroup>
+
 </Project>
