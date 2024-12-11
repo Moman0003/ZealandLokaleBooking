@@ -1,4 +1,5 @@
 @page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Zealand_Lokale_Booking.Pages.Booking.BookRoomsModel
 @{
     ViewData["Title"] = "Book Lokaler";
@@ -7,11 +8,15 @@
 
 <h1>Book Lokaler</h1>
 
-<!-- Filter-funktion -->
-<div class="mb-3">
-    <label for="filterDate" class="form-label">Filtrer efter dato:</label>
-    <input type="date" id="filterDate" class="form-control" onchange="FilterBookings()" />
-</div>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
 
 <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
     <table class="table table-striped">
@@ -20,10 +25,10 @@
                 <th>Lokale Navn</th>
                 <th>Lokale Type</th>
                 <th>Status</th>
-                <th></th>
+                <th>Handling</th>
             </tr>
         </thead>
-        <tbody id="roomList">
+        <tbody>
             @foreach (var room in Model.Rooms)
             {
                 <tr>
@@ -31,9 +36,16 @@
                     <td>@room.RoomType</td>
                     <td>@(room.IsBooked ? "Booket" : "Tilgængelig")</td>
                     <td>
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#roomModal-@room.RoomId">
-                            Se mere info
-                        </button>
+                        @if (room.RoomType == "Auditorium" && User.Claims.FirstOrDefault(c => c.Type == "role")?.Value != "Teacher")
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>Kun for lærere</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#roomModal-@room.RoomId">
+                                Se mere info
+                            </button>
+                        }
                     </td>
                 </tr>
             }
@@ -54,62 +66,35 @@
                     <p><strong>Kapacitet:</strong> @room.Capacity</p>
                     <p><strong>Type:</strong> @room.RoomType</p>
                     <p><strong>Status:</strong> @(room.IsBooked ? "Booket" : "Tilgængelig")</p>
-                    <p>
-                        <strong>Bookbar Tid:</strong>
-                        @if (room.RoomType == "Klasselokale")
-                        {
-                            <span>08:00 - 16:00 (fuld skoledag)</span>
-                        }
-                        else if (room.RoomType == "Gruppelokale")
-                        {
-                            <span>3 timer pr. booking</span>
-                        }
-                        else
-                        {
-                            <span>Ikke angivet</span>
-                        }
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    @if (!room.IsBooked)
+                    @if (room.RoomType == "Auditorium")
                     {
-                        <form method="post" asp-page-handler="BookRoom">
-                            <input type="hidden" name="roomId" value="@room.RoomId" />
-                            <button type="submit" class="btn btn-success">Book Lokale</button>
-                        </form>
+                        <p><strong>Booking intervaller:</strong> 30 eller 60 minutter.</p>
                     }
-                    else
-                    {
-                        <button class="btn btn-secondary" disabled>Allerede Booket</button>
-                    }
+                    <form method="post" asp-page-handler="BookRoom">
+                        <input type="hidden" name="roomId" value="@room.RoomId" />
+                        <label for="bookingDate" class="form-label">Dato:</label>
+                        <input type="date" id="bookingDate" name="bookingDate" class="form-control" required />
+                        <label for="startTime" class="form-label">Starttid:</label>
+                        <input type="time" id="startTime" name="startTime" class="form-control" required />
+                        @if (room.RoomType == "Auditorium")
+                        {
+                            <label for="intervalMinutes" class="form-label">Varighed:</label>
+                            <select id="intervalMinutes" name="intervalMinutes" class="form-control">
+                                <option value="30">30 minutter</option>
+                                <option value="60">60 minutter</option>
+                            </select>
+                        }
+                        <button type="submit" class="btn btn-success mt-2">Book Lokale</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 }
 
-    <script>
-        async function FilterBookings() {
-            const filterDate = document.getElementById('filterDate').value;
-            const response = await fetch(`/api/booking/filter-by-date?date=${filterDate}`);
-            const bookings = await response.json();
 
-            const roomList = document.getElementById('roomList');
-            roomList.innerHTML = '';
 
-            bookings.forEach(booking => {
-                const row = `
-                    <tr>
-                        <td>${booking.roomName}</td>
-                        <td>${booking.roomType}</td>
-                        <td>${booking.isBooked ? "Booket" : "Tilgængelig"}</td>
-                        <td>
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#roomModal-${booking.roomId}">
-                                Se mere info
-                            </button>
-                        </td>
-                    </tr>`;
-                roomList.innerHTML += row;
-            });
-        }
-    </script>
+
+
+
+
