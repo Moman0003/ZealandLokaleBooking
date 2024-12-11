@@ -1,26 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Zealand_Lokale_Booking.csproj": {}
+    "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBookingÆgte\\Zealand_Lokale_Booking\\Zealand_Lokale_Booking.csproj": {}
   },
   "projects": {
-    "/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Zealand_Lokale_Booking.csproj": {
+    "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBookingÆgte\\Zealand_Lokale_Booking\\Zealand_Lokale_Booking.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Zealand_Lokale_Booking.csproj",
+        "projectUniqueName": "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBookingÆgte\\Zealand_Lokale_Booking\\Zealand_Lokale_Booking.csproj",
         "projectName": "Zealand_Lokale_Booking",
-        "projectPath": "/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/Zealand_Lokale_Booking.csproj",
-        "packagesPath": "/Users/momans/.nuget/packages/",
-        "outputPath": "/Users/momans/RiderProjects/ZealandLokaleBooking/Zealand_Lokale_Booking/obj/",
+        "projectPath": "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBookingÆgte\\Zealand_Lokale_Booking\\Zealand_Lokale_Booking.csproj",
+        "packagesPath": "C:\\Users\\Sebas\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Sebas\\RiderProjects\\ZealandLokaleBookingÆgte\\Zealand_Lokale_Booking\\obj\\",
         "projectStyle": "PackageReference",
-        "UsingMicrosoftNETSdk": false,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/momans/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Sebas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -82,7 +87,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/x64/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

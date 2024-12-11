@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Microsoft SQL Server (JetBrains)" uuid="70ac5654-39cb-4329-9881-833231e3c732">
+    <data-source source="LOCAL" name="isomagid_dk_db_lokale_booking@mssql1.unoeuro.com" uuid="97c1ad95-9d3f-43c7-af9a-c247c0920dc2">
       <driver-ref>sqlserver.jb</driver-ref>
       <synchronize>true</synchronize>
       <configured-by-url>true</configured-by-url>
       <jdbc-driver>com.jetbrains.jdbc.sqlserver.SqlServerDriver</jdbc-driver>
-      <jdbc-url>Server=mssql1.unoeuro.com,1433;Database=isomagid_dk_db_lokale_booking;User Id=isomagid_dk;Password=mk2GfahFy3Bnbg9R5dtx;TrustServerCertificate=True;;</jdbc-url>
+      <jdbc-url>Server=mssql1.unoeuro.com,1433;Database=isomagid_dk_db_lokale_booking;User Id=isomagid_dk;Password=mk2GfahFy3Bnbg9R5dtx;TrustServerCertificate=True;</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
