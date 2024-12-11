@@ -6,6 +6,10 @@ using ZealandLokaleBooking.Data; // Namespace til ApplicationDbContext
 using ZealandLokaleBooking.Models; // Namespace til User modellen
 using System.Linq;
 using Microsoft.EntityFrameworkCore; // For LINQ
+using System; 
+using System.Threading.Tasks; // Tilføj dette for at kunne bruge Task
+using System.Collections.Generic; // Tilføj dette for at kunne bruge List<T>
+
 
 namespace ZealandLokaleBooking.Controllers
 {
@@ -26,7 +30,6 @@ namespace ZealandLokaleBooking.Controllers
         }
 
         // POST: /Account/Login
-        [HttpPost]
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
@@ -64,14 +67,11 @@ namespace ZealandLokaleBooking.Controllers
                 }
             }
 
-            // Hvis login fejler
+            // Hvis login fejler, returnér med en fejlmeddelelse til login-siden
             Console.WriteLine("Login mislykkedes. Ugyldig email eller adgangskode.");
-            ViewBag.ErrorMessage = "Ugyldig email eller adgangskode.";
+            ViewBag.ErrorMessage = "Forkert brugernavn eller adgangskode. Prøv igen.";
             return View();
         }
-
-        
-
 
         // GET: /Account/Logout
         [HttpGet]
@@ -87,7 +87,6 @@ namespace ZealandLokaleBooking.Controllers
         {
             return View(); // Returnerer Register.cshtml i Views/Account
         }
-        
 
         [HttpPost]
         public IActionResult Register(string firstName, string lastName, string email, string password, string phoneNumber)
@@ -111,8 +110,5 @@ namespace ZealandLokaleBooking.Controllers
             TempData["SuccessMessage"] = "Din konto er blevet oprettet. Du kan nu logge ind.";
             return RedirectToPage("/Index");
         }
-
-
-
     }
 }

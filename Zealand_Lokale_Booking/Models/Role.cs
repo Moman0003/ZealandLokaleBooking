@@ -1,3 +1,6 @@
+using System.Collections.Generic; // Tilføj dette for at kunne bruge List<T>
+
+
 namespace ZealandLokaleBooking.Models
 {
     public class Role

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ZealandLokaleBooking.Data;
+using System; // Tilføj dette for at få adgang til DateTime
+using System.Linq; // Tilføj dette for at få adgang til ToList() og LINQ
 
 namespace ZealandLokaleBooking.Controllers
 {

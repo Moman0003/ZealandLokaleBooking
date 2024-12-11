@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using ZealandLokaleBooking.Data;
 using ZealandLokaleBooking.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using System.Linq; 
 using System.Collections.Generic;  // Sørg for at importere for at bruge List<> og andre samlinger
 using System;
-using System.Text.RegularExpressions;
+
+
 
 namespace Zealand_Lokale_Booking.Pages.Booking
 {
@@ -22,14 +23,11 @@ namespace Zealand_Lokale_Booking.Pages.Booking
         // Liste af lokaler, som vises på siden
         public List<Room> Rooms { get; set; }
 
+        // Hent alle lokaler på OnGet
         public void OnGet()
         {
-            Rooms = _context.Rooms
-                .AsEnumerable() // Hent alle data til klienten, så vi kan bruge Regex
-                .OrderBy(r => r.RoomType == "Gruppe" ? 0 : 1) // Ensure Gruppelokaler come first
-                .ThenBy(r => r.RoomType == "Klasselokale" ? int.Parse(Regex.Match(r.RoomName, @"\d+").Value) : int.MaxValue) // Extract number for Klasselokale
-                .ThenBy(r => r.RoomName) // Sort by RoomName if numbers are the same
-                .ToList();
+            // Fetch all rooms
+            Rooms = _context.Rooms.ToList();
         }
 
         // Håndterer rum booking
@@ -39,14 +37,24 @@ namespace Zealand_Lokale_Booking.Pages.Booking
 
             if (room != null && !room.IsBooked)
             {
-                // Mark room as booked
-                room.IsBooked = true;
-
                 // Find user based on email and assign to booking
                 var userEmail = User.Identity.Name;
                 var user = _context.Users.FirstOrDefault(u => u.Email == userEmail);
                 if (user != null)
                 {
+                    // Tjek om brugeren allerede har 3 aktive bookinger
+                    var activeBookingsCount = _context.Bookings
+                        .Where(b => b.UserId == user.UserId && b.IsActive && !b.IsDeleted)
+                        .Count();
+
+                    if (activeBookingsCount >= 3)
+                    {
+                        TempData["ErrorMessage"] = "Du kan kun have 3 aktive bookinger ad gangen.";
+                        return RedirectToPage(); // Redirect tilbage med fejlbesked
+                    }
+
+                    // Mark room as booked
+                    room.IsBooked = true;
                     room.BookedByUserId = user.UserId;
 
                     // Logic for booking based on room type
@@ -59,19 +67,25 @@ namespace Zealand_Lokale_Booking.Pages.Booking
                         // Logic for 3-hour booking limit
                     }
 
-                    // Save booking and room state
+                    // Opret en ny booking
+                    var booking = new ZealandLokaleBooking.Models.Booking()
+                    {
+                        RoomId = room.RoomId,
+                        UserId = user.UserId,
+                        StartTime = DateTime.Now, // Placeholder, dette kan ændres til faktisk starttid
+                        EndTime = DateTime.Now.AddHours(3), // Placeholder, dette kan ændres baseret på rumtypen
+                        IsDeleted = false,
+                        IsActive = true
+                    };
+
+                    // Tilføj booking til databasen
+                    _context.Bookings.Add(booking);
                     _context.SaveChanges();
-                    
-                    // Set success message in TempData to display to user
-                    TempData["SuccessMessage"] = $"Lokalet '{room.RoomName}' blev booket succesfuldt!";
-                    
                     return RedirectToPage(); // Refresh page after booking
                 }
             }
-            
-            // Redirect back if no room or user found
-            TempData["ErrorMessage"] = "Lokalet kunne ikke bookes.";
-            return RedirectToPage(); 
+
+            return RedirectToPage(); // Redirect back if there is no room or user
         }
     }
 }
