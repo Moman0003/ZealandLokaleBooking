@@ -55,13 +55,16 @@
                     }
                 </td>
                 <td>
-                    @if (activeBookings.FirstOrDefault()?.User != null)
+                    @if (activeBookings.Any())
                     {
-                        @activeBookings.FirstOrDefault().User.FirstName
+                        @foreach (var booking in activeBookings)
+                        {
+                            <span>@(booking.User?.FirstName ?? "Ukendt")</span><br />
+                        }
                     }
                     else
                     {
-                        <span>Ukendt</span>
+                        <span>Ingen</span>
                     }
                 </td>
                 <td>
@@ -144,6 +147,8 @@
         }
     </tbody>
 </table>
+
+
 
 
 

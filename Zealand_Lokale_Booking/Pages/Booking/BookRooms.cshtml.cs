@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using ZealandLokaleBooking.Data;
 using ZealandLokaleBooking.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
 using System;
@@ -21,12 +22,18 @@ namespace Zealand_Lokale_Booking.Pages.Booking
 
         public void OnGet()
         {
-            Rooms = _context.Rooms.ToList();
+            // Hent lokaler, inkl. bookinger og brugere
+            Rooms = _context.Rooms
+                .Include(r => r.Bookings.Where(b => b.IsActive && b.Status == "Active"))
+                .ThenInclude(b => b.User) // Inkluder brugeroplysninger
+                .ToList();
         }
 
         public IActionResult OnPostBookRoom(int roomId, DateTime bookingDate, TimeSpan startTime, int intervalMinutes)
         {
-            var room = _context.Rooms.FirstOrDefault(r => r.RoomId == roomId);
+            var room = _context.Rooms
+                .Include(r => r.Bookings.Where(b => b.IsActive && b.Status == "Active"))
+                .FirstOrDefault(r => r.RoomId == roomId);
 
             if (room == null)
             {
@@ -51,16 +58,32 @@ namespace Zealand_Lokale_Booking.Pages.Booking
             var startDateTime = bookingDate.Add(startTime);
             var endDateTime = startDateTime.AddMinutes(intervalMinutes);
 
-            var overlappingBooking = _context.Bookings
-                .Where(b => b.RoomId == roomId && b.IsActive)
-                .Any(b => b.StartTime < endDateTime && b.EndTime > startDateTime);
-
-            if (overlappingBooking)
+            if (room.RoomType == "Klasselokale")
             {
-                TempData["ErrorMessage"] = "Lokalet er allerede booket i dette tidsrum.";
-                return RedirectToPage();
+                // Find aktive bookinger for dette lokale på samme dato
+                var sameDateBookings = room.Bookings
+                    .Where(b => b.StartTime.Date == bookingDate.Date)
+                    .ToList();
+
+                // Tillad maks. 2 aktive bookinger på samme dato
+                if (sameDateBookings.Count >= 2)
+                {
+                    TempData["ErrorMessage"] = "Klasselokalet har allerede to aktive bookinger på denne dato.";
+                    return RedirectToPage();
+                }
+
+                // Kontrollér for overlap med eksisterende bookinger for samme bruger
+                var userOverlap = sameDateBookings
+                    .Any(b => b.StartTime < endDateTime && b.EndTime > startDateTime && b.UserId == user.UserId);
+
+                if (userOverlap)
+                {
+                    TempData["ErrorMessage"] = "Du har allerede booket dette lokale i dette tidsrum.";
+                    return RedirectToPage();
+                }
             }
 
+            // Opret ny booking
             var booking = new ZealandLokaleBooking.Models.Booking
             {
                 RoomId = room.RoomId,
@@ -73,8 +96,17 @@ namespace Zealand_Lokale_Booking.Pages.Booking
             };
 
             _context.Bookings.Add(booking);
-            room.IsBooked = true;
-            room.BookedByUserId = user.UserId;
+
+            // Opdater IsBooked-status for klasselokalet, hvis der er mindst én aktiv booking
+            if (room.RoomType == "Klasselokale")
+            {
+                room.IsBooked = room.Bookings.Any(b => b.IsActive);
+            }
+            else
+            {
+                room.IsBooked = true;
+                room.BookedByUserId = user.UserId;
+            }
 
             _context.SaveChanges();
 
@@ -83,6 +115,10 @@ namespace Zealand_Lokale_Booking.Pages.Booking
         }
     }
 }
+
+
+
+
 
 
 
