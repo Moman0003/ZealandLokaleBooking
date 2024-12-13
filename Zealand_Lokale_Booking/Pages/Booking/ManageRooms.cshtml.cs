@@ -28,65 +28,76 @@ namespace Zealand_Lokale_Booking.Pages.Booking
 
             if (filter == "booked")
             {
+                // Vis kun lokaler med aktive bookinger
                 Rooms = _context.Rooms
                     .Include(r => r.BookedByUser)
-                    .Include(r => r.Bookings.Where(b => b.IsActive))
-                    .Where(r => r.Bookings.Any(b => b.IsActive && b.EndTime >= DateTime.Now))
+                    .Include(r => r.Bookings.Where(b => b.IsActive && b.Status == "Active"))
+                    .Where(r => r.Bookings.Any(b => b.IsActive && b.Status == "Active"))
                     .ToList();
             }
             else if (filter == "available")
             {
+                // Vis kun lokaler uden aktive bookinger
                 Rooms = _context.Rooms
                     .Include(r => r.Bookings)
-                    .Where(r => !r.Bookings.Any(b => b.IsActive && b.EndTime >= DateTime.Now))
+                    .Where(r => !r.Bookings.Any(b => b.IsActive && b.Status == "Active"))
                     .ToList();
             }
             else // "all"
             {
+                // Vis alle lokaler, og medtag eventuelle aktive bookinger
                 Rooms = _context.Rooms
                     .Include(r => r.BookedByUser)
-                    .Include(r => r.Bookings.Where(b => b.IsActive))
+                    .Include(r => r.Bookings.Where(b => b.IsActive && b.Status == "Active"))
                     .ToList();
             }
         }
 
         public async Task<IActionResult> OnPostCancelBookingAsync(int roomId)
         {
-            var room = _context.Rooms
-                .Include(r => r.Bookings)
-                .FirstOrDefault(r => r.RoomId == roomId);
+            var room = _context.Rooms.Include(r => r.BookedByUser).FirstOrDefault(r => r.RoomId == roomId);
 
-            if (room == null)
+            if (room == null || !room.IsBooked)
             {
-                TempData["ErrorMessage"] = "Lokalet findes ikke.";
+                TempData["ErrorMessage"] = "Lokalet har ingen aktiv booking.";
                 return RedirectToPage(new { filter = Filter });
             }
 
-            // Find den første aktive booking og annuller den
-            var booking = room.Bookings.FirstOrDefault(b => b.IsActive && b.EndTime >= DateTime.Now);
+            // Fjern booking fra lokalet
+            room.IsBooked = false;
+            var bookedUserId = room.BookedByUserId;
+            room.BookedByUserId = null;
+
+            // Opdater bookingstatus
+            var booking = _context.Bookings.FirstOrDefault(b => b.RoomId == roomId && b.Status == "Active");
             if (booking != null)
             {
                 booking.Status = "Cancelled";
                 booking.IsActive = false;
-
-                if (!room.Bookings.Any(b => b.IsActive))
-                {
-                    room.IsBooked = false;
-                    room.BookedByUserId = null;
-                }
-
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = $"Bookingen for lokalet \"{room.RoomName}\" blev annulleret.";
             }
-            else
+
+            // Opret notifikation
+            if (bookedUserId != null) // Brug != null i stedet for .HasValue
             {
-                TempData["ErrorMessage"] = "Ingen aktive bookinger blev fundet.";
+                var notification = new Notification
+                {
+                    UserId = bookedUserId ?? 0, // Hvis nullable, tildel standardværdi (0 for sikkerhed)
+                    Message = $"Din booking for lokalet \"{room.RoomName}\" blev annulleret.",
+                    CreatedAt = DateTime.Now,
+                    IsRead = false
+                };
+                _context.Notifications.Add(notification);
             }
 
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] =
+                $"Bookingen for lokalet \"{room.RoomName}\" blev annulleret, og brugeren fik en notifikation.";
             return RedirectToPage(new { filter = Filter });
         }
     }
 }
+
 
 
 

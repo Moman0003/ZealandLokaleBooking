@@ -56,14 +56,13 @@
                 <td>
                     @if (activeBooking?.User != null)
                     {
-                    @activeBooking.User.FirstName
+                        @activeBooking.User.FirstName
                     }
                     else
                     {
-                    <span>Ukendt</span>
+                        <span>Ukendt</span>
                     }
                 </td>
-
                 <td>
                     @if (activeBooking != null)
                     {
@@ -92,7 +91,7 @@
                         <div class="modal-footer">
                             <form method="post" asp-page-handler="CancelBooking">
                                 <input type="hidden" name="roomId" value="@room.RoomId" />
-                                <input type="hidden" name="bookingId" value="@activeBooking?.RoomId" />
+                                <input type="hidden" name="bookingId" value="@(activeBooking?.RoomId ?? 0)" />
                                 <button type="submit" class="btn btn-danger">Annuller</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fortryd</button>
                             </form>
@@ -103,6 +102,7 @@
         }
     </tbody>
 </table>
+
 
 
 
