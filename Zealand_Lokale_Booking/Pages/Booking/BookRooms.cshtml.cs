@@ -21,7 +21,6 @@ namespace Zealand_Lokale_Booking.Pages.Booking
 
         public void OnGet()
         {
-            // Hent alle lokaler
             Rooms = _context.Rooms.ToList();
         }
 
@@ -43,59 +42,42 @@ namespace Zealand_Lokale_Booking.Pages.Booking
                 return RedirectToPage();
             }
 
-            if (room.RoomType == "Auditorium")
+            var startDateTime = bookingDate.Add(startTime);
+            var endDateTime = startDateTime.AddMinutes(intervalMinutes);
+
+            var overlappingBooking = _context.Bookings
+                .Where(b => b.RoomId == roomId && b.IsActive)
+                .Any(b => b.StartTime < endDateTime && b.EndTime > startDateTime);
+
+            if (overlappingBooking)
             {
-                if (user.RoleId != 2) // Kun lærere kan booke
-                {
-                    TempData["ErrorMessage"] = "Kun lærere kan booke auditoriet.";
-                    return RedirectToPage();
-                }
-
-                if (intervalMinutes != 30 && intervalMinutes != 60)
-                {
-                    TempData["ErrorMessage"] = "Auditoriet kan kun bookes i 30- eller 60-minutters intervaller.";
-                    return RedirectToPage();
-                }
-
-                // Beregn start- og sluttidspunkt for booking
-                var startDateTime = bookingDate.Add(startTime);
-                var endDateTime = startDateTime.AddMinutes(intervalMinutes);
-
-                // Kontrollér for overlappende bookinger
-                var overlappingBooking = _context.Bookings
-                    .Where(b => b.RoomId == roomId && b.IsActive)
-                    .Any(b => b.StartTime < endDateTime && b.EndTime > startDateTime);
-
-                if (overlappingBooking)
-                {
-                    TempData["ErrorMessage"] = "Auditoriet er allerede booket i dette tidsrum.";
-                    return RedirectToPage();
-                }
-
-                // Opret ny booking
-                var booking = new ZealandLokaleBooking.Models.Booking
-                {
-                    RoomId = room.RoomId,
-                    UserId = user.UserId,
-                    StartTime = startDateTime,
-                    EndTime = endDateTime,
-                    IsDeleted = false,
-                    IsActive = true,
-                    Status = "Active"
-                };
-
-                _context.Bookings.Add(booking);
-                _context.SaveChanges();
-
-                TempData["SuccessMessage"] = $"Lokalet '{room.RoomName}' blev booket fra {startDateTime:HH:mm} til {endDateTime:HH:mm} den {bookingDate:dd-MM-yyyy}.";
+                TempData["ErrorMessage"] = "Lokalet er allerede booket i dette tidsrum.";
                 return RedirectToPage();
             }
 
-            TempData["ErrorMessage"] = "Dette lokale er ikke et auditorium.";
+            var booking = new ZealandLokaleBooking.Models.Booking
+            {
+                RoomId = room.RoomId,
+                UserId = user.UserId,
+                StartTime = startDateTime,
+                EndTime = endDateTime,
+                IsDeleted = false,
+                IsActive = true,
+                Status = "Active"
+            };
+
+            _context.Bookings.Add(booking);
+            room.IsBooked = true;
+            room.BookedByUserId = user.UserId;
+
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = $"Lokalet '{room.RoomName}' blev booket fra {startDateTime:HH:mm} til {endDateTime:HH:mm} den {bookingDate:dd-MM-yyyy}.";
             return RedirectToPage();
         }
     }
 }
+
 
 
 

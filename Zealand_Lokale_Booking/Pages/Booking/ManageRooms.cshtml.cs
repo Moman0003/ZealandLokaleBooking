@@ -1,4 +1,4 @@
-﻿﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using ZealandLokaleBooking.Data;
 using ZealandLokaleBooking.Models;
 using Microsoft.EntityFrameworkCore;
@@ -26,71 +26,68 @@ namespace Zealand_Lokale_Booking.Pages.Booking
         {
             Filter = filter;
 
-            // Filtrering af lokaler baseret på status
             if (filter == "booked")
             {
                 Rooms = _context.Rooms
                     .Include(r => r.BookedByUser)
-                    .Where(r => r.IsBooked)
+                    .Include(r => r.Bookings.Where(b => b.IsActive))
+                    .Where(r => r.Bookings.Any(b => b.IsActive && b.EndTime >= DateTime.Now))
                     .ToList();
             }
             else if (filter == "available")
             {
                 Rooms = _context.Rooms
-                    .Where(r => !r.IsBooked)
+                    .Include(r => r.Bookings)
+                    .Where(r => !r.Bookings.Any(b => b.IsActive && b.EndTime >= DateTime.Now))
                     .ToList();
             }
             else // "all"
             {
                 Rooms = _context.Rooms
                     .Include(r => r.BookedByUser)
+                    .Include(r => r.Bookings.Where(b => b.IsActive))
                     .ToList();
             }
         }
 
         public async Task<IActionResult> OnPostCancelBookingAsync(int roomId)
         {
-            var room = _context.Rooms.Include(r => r.BookedByUser).FirstOrDefault(r => r.RoomId == roomId);
+            var room = _context.Rooms
+                .Include(r => r.Bookings)
+                .FirstOrDefault(r => r.RoomId == roomId);
 
-            if (room == null || !room.IsBooked)
+            if (room == null)
             {
-                TempData["ErrorMessage"] = "Lokalet har ingen aktiv booking.";
+                TempData["ErrorMessage"] = "Lokalet findes ikke.";
                 return RedirectToPage(new { filter = Filter });
             }
 
-            // Fjern booking fra lokalet
-            room.IsBooked = false;
-            var bookedUserId = room.BookedByUserId;
-            room.BookedByUserId = null;
-
-            // Opdater bookingstatus
-            var booking = _context.Bookings.FirstOrDefault(b => b.RoomId == roomId && b.Status == "Active");
+            // Find den første aktive booking og annuller den
+            var booking = room.Bookings.FirstOrDefault(b => b.IsActive && b.EndTime >= DateTime.Now);
             if (booking != null)
             {
                 booking.Status = "Cancelled";
                 booking.IsActive = false;
-            }
 
-            // Opret notifikation
-            if (bookedUserId.HasValue)
-            {
-                var notification = new Notification
+                if (!room.Bookings.Any(b => b.IsActive))
                 {
-                    UserId = bookedUserId.Value,
-                    Message = $"Din booking for lokalet \"{room.RoomName}\" er blevet annulleret.",
-                    CreatedAt = DateTime.Now,
-                    IsRead = false
-                };
-                _context.Notifications.Add(notification);
+                    room.IsBooked = false;
+                    room.BookedByUserId = null;
+                }
+
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = $"Bookingen for lokalet \"{room.RoomName}\" blev annulleret.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Ingen aktive bookinger blev fundet.";
             }
 
-            await _context.SaveChangesAsync();
-
-            TempData["SuccessMessage"] = $"Bookingen for lokalet \"{room.RoomName}\" blev annulleret, og brugeren fik en notifikation.";
             return RedirectToPage(new { filter = Filter });
         }
     }
 }
+
 
 
 

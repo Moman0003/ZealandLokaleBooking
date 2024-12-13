@@ -2,19 +2,19 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Zealand_Lokale_Booking.Pages.Booking.ManageRoomsModel
 @{
-ViewData["Title"] = "Administrer Lokaler";
+    ViewData["Title"] = "Administrer Lokaler";
 }
 
 <h1>Administrer Lokaler</h1>
 
 @if (TempData["ErrorMessage"] != null)
 {
-<div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
 }
 
 @if (TempData["SuccessMessage"] != null)
 {
-<div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
 }
 
 <div class="btn-group mb-3" role="group" aria-label="Filter lokaler">
@@ -25,68 +25,84 @@ ViewData["Title"] = "Administrer Lokaler";
 
 <table class="table">
     <thead>
-    <tr>
-        <th>Lokale</th>
-        <th>Type</th>
-        <th>Kapacitet</th>
-        <th>Status</th>
-        <th>Booket Af</th>
-        <th>Handling</th>
-    </tr>
+        <tr>
+            <th>Lokale</th>
+            <th>Type</th>
+            <th>Kapacitet</th>
+            <th>Status</th>
+            <th>Booket Af</th>
+            <th>Handling</th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var room in Model.Rooms)
-    {
-    <tr>
-        <td>@room.RoomName</td>
-        <td>@room.RoomType</td>
-        <td>@room.Capacity</td>
-        <td>
-            @if (room.IsBooked)
-            {
-            <span class="badge bg-danger">Booket</span>
-            }
-            else
-            {
-            <span class="badge bg-success">Ledigt</span>
-            }
-        </td>
-        <td>@(room.IsBooked ? room.BookedByUser?.FirstName ?? "Ukendt" : "-")</td>
-        <td>
-            @if (room.IsBooked)
-            {
-            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#cancelBookingModal-@room.RoomId">
-                Annuller Booking
-            </button>
-            }
-            else
-            {
-            <button class="btn btn-secondary btn-sm" disabled>Ingen Handling</button>
-            }
-        </td>
-    </tr>
+        @foreach (var room in Model.Rooms)
+        {
+            var activeBooking = room.Bookings.FirstOrDefault(b => b.IsActive && b.EndTime >= DateTime.Now);
 
-    <!-- Modal til bekræftelse af annullering -->
-    <div class="modal fade" id="cancelBookingModal-@room.RoomId" tabindex="-1" aria-labelledby="cancelBookingModalLabel-@room.RoomId" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cancelBookingModalLabel-@room.RoomId">Annuller Booking</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Er du sikker på, at du vil annullere bookingen for "<strong>@room.RoomName</strong>"?</p>
-                </div>
-                <div class="modal-footer">
-                    <form method="post" asp-page-handler="CancelBooking">
-                        <input type="hidden" name="roomId" value="@room.RoomId" />
-                        <button type="submit" class="btn btn-danger">Annuller</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fortryd</button>
-                    </form>
+            <tr>
+                <td>@room.RoomName</td>
+                <td>@room.RoomType</td>
+                <td>@room.Capacity</td>
+                <td>
+                    @if (activeBooking != null)
+                    {
+                        <span class="badge bg-danger">Booket</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Ledigt</span>
+                    }
+                </td>
+                <td>
+                    @if (activeBooking?.User != null)
+                    {
+                    @activeBooking.User.FirstName
+                    }
+                    else
+                    {
+                    <span>Ukendt</span>
+                    }
+                </td>
+
+                <td>
+                    @if (activeBooking != null)
+                    {
+                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#cancelBookingModal-@room.RoomId">
+                            Annuller Booking
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary btn-sm" disabled>Ingen Handling</button>
+                    }
+                </td>
+            </tr>
+
+            <!-- Modal til bekræftelse af annullering -->
+            <div class="modal fade" id="cancelBookingModal-@room.RoomId" tabindex="-1" aria-labelledby="cancelBookingModalLabel-@room.RoomId" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cancelBookingModalLabel-@room.RoomId">Annuller Booking</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Er du sikker på, at du vil annullere bookingen for "<strong>@room.RoomName</strong>"?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form method="post" asp-page-handler="CancelBooking">
+                                <input type="hidden" name="roomId" value="@room.RoomId" />
+                                <input type="hidden" name="bookingId" value="@activeBooking?.RoomId" />
+                                <button type="submit" class="btn btn-danger">Annuller</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fortryd</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    }
+        }
     </tbody>
 </table>
+
+
+
