@@ -8,12 +8,6 @@
 
 <h1>Book Lokaler</h1>
 
-<!-- Filter-funktion -->
-<div class="mb-3">
-    <label for="filterDate" class="form-label">Filtrer efter dato:</label>
-    <input type="date" id="filterDate" class="form-control" onchange="FilterBookings()" />
-</div>
-
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">@TempData["SuccessMessage"]</div>
@@ -42,9 +36,16 @@
                     <td>@room.RoomType</td>
                     <td>@(room.IsBooked ? "Booket" : "Tilgængelig")</td>
                     <td>
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#roomModal-@room.RoomId">
-                            Se mere info
-                        </button>
+                        @if (room.RoomType == "Auditorium" && User.Claims.FirstOrDefault(c => c.Type == "role")?.Value != "Teacher")
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>Kun for lærere</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#roomModal-@room.RoomId">
+                                Se mere info
+                            </button>
+                        }
                     </td>
                 </tr>
             }
@@ -70,7 +71,16 @@
                         <label for="bookingDate" class="form-label">Dato:</label>
                         <input type="date" id="bookingDate" name="bookingDate" class="form-control" required />
                         <label for="startTime" class="form-label">Starttid:</label>
-                        <input type="time" id="startTime" name="startTime" class="form-control" required />
+                        <select id="startTime" name="startTime" class="form-control" required>
+                            @for (var hour = 7; hour < 18; hour++) // Begrænset til 07:00 - 18:00
+                            {
+                                for (var minute = 0; minute < 60; minute += 15)
+                                {
+                                    var time = new TimeSpan(hour, minute, 0);
+                                    <option value="@time">@time.ToString(@"hh\:mm")</option>
+                                }
+                            }
+                        </select>
                         <label for="intervalMinutes" class="form-label">Varighed:</label>
                         <select id="intervalMinutes" name="intervalMinutes" class="form-control" required>
                             @if (room.RoomType == "Auditorium")
@@ -90,10 +100,6 @@
                                 <option value="60">1 time</option>
                                 <option value="120">2 timer</option>
                             }
-                            else
-                            {
-                                <option value="" disabled>Ingen varighed tilgængelig</option>
-                            }
                         </select>
                         <button type="submit" class="btn btn-success mt-2">Book Lokale</button>
                     </form>
@@ -102,6 +108,9 @@
         </div>
     </div>
 }
+
+
+
 
 
 

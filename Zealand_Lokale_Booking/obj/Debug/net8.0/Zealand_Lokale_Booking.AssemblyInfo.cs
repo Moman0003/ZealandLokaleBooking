@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Zealand_Lokale_Booking")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+873cd212cf54adcf9c6dff1ab0e34c97b5ad886e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+234b9a935863a1fa87ffb4d4857201b315644545")]
 [assembly: System.Reflection.AssemblyProductAttribute("Zealand_Lokale_Booking")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Zealand_Lokale_Booking")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

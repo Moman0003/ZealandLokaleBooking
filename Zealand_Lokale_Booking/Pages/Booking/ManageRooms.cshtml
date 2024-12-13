@@ -37,7 +37,7 @@
     <tbody>
         @foreach (var room in Model.Rooms)
         {
-            var activeBooking = room.Bookings.FirstOrDefault(b => b.IsActive && b.EndTime >= DateTime.Now);
+            var activeBooking = room.Bookings.FirstOrDefault(b => b.IsActive && b.Status == "Active");
 
             <tr>
                 <td>@room.RoomName</td>
@@ -102,6 +102,7 @@
         }
     </tbody>
 </table>
+
 
 
 

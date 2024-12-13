@@ -55,7 +55,10 @@ namespace Zealand_Lokale_Booking.Pages.Booking
 
         public async Task<IActionResult> OnPostCancelBookingAsync(int roomId)
         {
-            var room = _context.Rooms.Include(r => r.BookedByUser).FirstOrDefault(r => r.RoomId == roomId);
+            var room = _context.Rooms
+                .Include(r => r.BookedByUser)
+                .Include(r => r.Bookings)
+                .FirstOrDefault(r => r.RoomId == roomId);
 
             if (room == null || !room.IsBooked)
             {
@@ -63,25 +66,25 @@ namespace Zealand_Lokale_Booking.Pages.Booking
                 return RedirectToPage(new { filter = Filter });
             }
 
-            // Fjern booking fra lokalet
-            room.IsBooked = false;
-            var bookedUserId = room.BookedByUserId;
-            room.BookedByUserId = null;
-
-            // Opdater bookingstatus
-            var booking = _context.Bookings.FirstOrDefault(b => b.RoomId == roomId && b.Status == "Active");
+            // Find den aktive booking
+            var booking = room.Bookings.FirstOrDefault(b => b.IsActive && b.Status == "Active");
             if (booking != null)
             {
                 booking.Status = "Cancelled";
                 booking.IsActive = false;
             }
 
+            // Fjern bookingstatus fra lokalet
+            room.IsBooked = false;
+            var bookedUserId = room.BookedByUserId;
+            room.BookedByUserId = null;
+
             // Opret notifikation
-            if (bookedUserId != null) // Brug != null i stedet for .HasValue
+            if (bookedUserId.HasValue) // Hvis bookedUserId har en værdi
             {
                 var notification = new Notification
                 {
-                    UserId = bookedUserId ?? 0, // Hvis nullable, tildel standardværdi (0 for sikkerhed)
+                    UserId = bookedUserId.Value,
                     Message = $"Din booking for lokalet \"{room.RoomName}\" blev annulleret.",
                     CreatedAt = DateTime.Now,
                     IsRead = false
@@ -97,6 +100,8 @@ namespace Zealand_Lokale_Booking.Pages.Booking
         }
     }
 }
+
+
 
 
 
