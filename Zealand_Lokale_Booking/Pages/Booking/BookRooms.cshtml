@@ -8,6 +8,12 @@
 
 <h1>Book Lokaler</h1>
 
+<!-- Filter-funktion -->
+<div class="mb-3">
+    <label for="filterDate" class="form-label">Filtrer efter dato:</label>
+    <input type="date" id="filterDate" class="form-control" onchange="FilterBookings()" />
+</div>
+
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">@TempData["SuccessMessage"]</div>
@@ -72,7 +78,7 @@
                         <input type="date" id="bookingDate" name="bookingDate" class="form-control" required />
                         <label for="startTime" class="form-label">Starttid:</label>
                         <select id="startTime" name="startTime" class="form-control" required>
-                            @for (var hour = 7; hour < 18; hour++) // Begrænset til 07:00 - 18:00
+                            @for (var hour = 8; hour < 18; hour++) // Begrænset til 08:00 - 18:00
                             {
                                 for (var minute = 0; minute < 60; minute += 15)
                                 {
