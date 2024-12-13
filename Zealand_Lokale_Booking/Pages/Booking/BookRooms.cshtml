@@ -42,16 +42,9 @@
                     <td>@room.RoomType</td>
                     <td>@(room.IsBooked ? "Booket" : "Tilgængelig")</td>
                     <td>
-                        @if (room.RoomType == "Auditorium" && User.Claims.FirstOrDefault(c => c.Type == "role")?.Value != "Teacher")
-                        {
-                            <button class="btn btn-secondary btn-sm" disabled>Kun for lærere</button>
-                        }
-                        else
-                        {
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#roomModal-@room.RoomId">
-                                Se mere info
-                            </button>
-                        }
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#roomModal-@room.RoomId">
+                            Se mere info
+                        </button>
                     </td>
                 </tr>
             }
@@ -72,24 +65,36 @@
                     <p><strong>Kapacitet:</strong> @room.Capacity</p>
                     <p><strong>Type:</strong> @room.RoomType</p>
                     <p><strong>Status:</strong> @(room.IsBooked ? "Booket" : "Tilgængelig")</p>
-                    @if (room.RoomType == "Auditorium")
-                    {
-                        <p><strong>Booking intervaller:</strong> 30 eller 60 minutter.</p>
-                    }
                     <form method="post" asp-page-handler="BookRoom">
                         <input type="hidden" name="roomId" value="@room.RoomId" />
                         <label for="bookingDate" class="form-label">Dato:</label>
                         <input type="date" id="bookingDate" name="bookingDate" class="form-control" required />
                         <label for="startTime" class="form-label">Starttid:</label>
                         <input type="time" id="startTime" name="startTime" class="form-control" required />
-                        @if (room.RoomType == "Auditorium")
-                        {
-                            <label for="intervalMinutes" class="form-label">Varighed:</label>
-                            <select id="intervalMinutes" name="intervalMinutes" class="form-control">
+                        <label for="intervalMinutes" class="form-label">Varighed:</label>
+                        <select id="intervalMinutes" name="intervalMinutes" class="form-control" required>
+                            @if (room.RoomType == "Auditorium")
+                            {
                                 <option value="30">30 minutter</option>
                                 <option value="60">60 minutter</option>
-                            </select>
-                        }
+                            }
+                            else if (room.RoomType == "Klasselokale")
+                            {
+                                <option value="60">1 time</option>
+                                <option value="120">2 timer</option>
+                                <option value="180">3 timer</option>
+                                <option value="480">Hele dagen</option>
+                            }
+                            else if (room.RoomType == "Gruppe")
+                            {
+                                <option value="60">1 time</option>
+                                <option value="120">2 timer</option>
+                            }
+                            else
+                            {
+                                <option value="" disabled>Ingen varighed tilgængelig</option>
+                            }
+                        </select>
                         <button type="submit" class="btn btn-success mt-2">Book Lokale</button>
                     </form>
                 </div>
@@ -97,6 +102,8 @@
         </div>
     </div>
 }
+
+
 
 
 
