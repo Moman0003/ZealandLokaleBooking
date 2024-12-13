@@ -23,7 +23,7 @@
     <a class="btn btn-primary @(Model.Filter == "available" ? "active" : "")" href="?filter=available">Ledige Lokaler</a>
 </div>
 
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>Lokale</th>
@@ -37,14 +37,15 @@
     <tbody>
         @foreach (var room in Model.Rooms)
         {
-            var activeBooking = room.Bookings.FirstOrDefault(b => b.IsActive && b.Status == "Active");
+            var activeBookings = room.Bookings.Where(b => b.IsActive && b.Status == "Active").OrderBy(b => b.StartTime).ToList();
 
+            <!-- Lokale række -->
             <tr>
                 <td>@room.RoomName</td>
                 <td>@room.RoomType</td>
                 <td>@room.Capacity</td>
                 <td>
-                    @if (activeBooking != null)
+                    @if (activeBookings.Any())
                     {
                         <span class="badge bg-danger">Booket</span>
                     }
@@ -54,9 +55,9 @@
                     }
                 </td>
                 <td>
-                    @if (activeBooking?.User != null)
+                    @if (activeBookings.FirstOrDefault()?.User != null)
                     {
-                        @activeBooking.User.FirstName
+                        @activeBookings.FirstOrDefault().User.FirstName
                     }
                     else
                     {
@@ -64,10 +65,10 @@
                     }
                 </td>
                 <td>
-                    @if (activeBooking != null)
+                    @if (activeBookings.Any())
                     {
-                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#cancelBookingModal-@room.RoomId">
-                            Annuller Booking
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#bookings-@room.RoomId">
+                            Vis Bookinger
                         </button>
                     }
                     else
@@ -77,31 +78,84 @@
                 </td>
             </tr>
 
-            <!-- Modal til bekræftelse af annullering -->
-            <div class="modal fade" id="cancelBookingModal-@room.RoomId" tabindex="-1" aria-labelledby="cancelBookingModalLabel-@room.RoomId" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="cancelBookingModalLabel-@room.RoomId">Annuller Booking</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Er du sikker på, at du vil annullere bookingen for "<strong>@room.RoomName</strong>"?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <form method="post" asp-page-handler="CancelBooking">
-                                <input type="hidden" name="roomId" value="@room.RoomId" />
-                                <input type="hidden" name="bookingId" value="@(activeBooking?.RoomId ?? 0)" />
-                                <button type="submit" class="btn btn-danger">Annuller</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fortryd</button>
-                            </form>
+            <!-- Sammenfoldelig række til bookinger -->
+            <tr class="collapse" id="bookings-@room.RoomId">
+                <td colspan="6">
+                    @if (activeBookings.Any())
+                    {
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Starttid</th>
+                                    <th>Sluttid</th>
+                                    <th>Booket Af</th>
+                                    <th>Handling</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var booking in activeBookings)
+                                {
+                                    <tr>
+                                        <td>@booking.StartTime.ToString("dd-MM-yyyy HH:mm")</td>
+                                        <td>@booking.EndTime.ToString("dd-MM-yyyy HH:mm")</td>
+                                        <td>@(booking.User?.FirstName ?? "Ukendt")</td>
+                                        <td>
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#cancelBookingModal-@booking.RoomId">
+                                                Annuller
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p>Ingen aktive bookinger for dette lokale.</p>
+                    }
+                </td>
+            </tr>
+
+            <!-- Modal til annullering -->
+            @foreach (var booking in activeBookings)
+            {
+                <div class="modal fade" id="cancelBookingModal-@booking.RoomId" tabindex="-1" aria-labelledby="cancelBookingModalLabel-@booking.RoomId" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="cancelBookingModalLabel-@booking.RoomId">Annuller Booking</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Er du sikker på, at du vil annullere bookingen for "<strong>@room.RoomName</strong>" fra <strong>@booking.StartTime.ToString("dd-MM-yyyy HH:mm")</strong> til <strong>@booking.EndTime.ToString("dd-MM-yyyy HH:mm")</strong>?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post" asp-page-handler="CancelBooking">
+                                    <input type="hidden" name="roomId" value="@room.RoomId" />
+                                    <input type="hidden" name="bookingId" value="@booking.RoomId" />
+                                    <button type="submit" class="btn btn-danger">Annuller</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fortryd</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         }
     </tbody>
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

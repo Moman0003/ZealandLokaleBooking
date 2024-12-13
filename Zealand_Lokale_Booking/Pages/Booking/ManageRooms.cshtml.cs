@@ -60,26 +60,38 @@ namespace Zealand_Lokale_Booking.Pages.Booking
                 .Include(r => r.Bookings)
                 .FirstOrDefault(r => r.RoomId == roomId);
 
-            if (room == null || !room.IsBooked)
+            if (room == null)
             {
-                TempData["ErrorMessage"] = "Lokalet har ingen aktiv booking.";
+                TempData["ErrorMessage"] = "Lokalet blev ikke fundet.";
                 return RedirectToPage(new { filter = Filter });
             }
 
-            // Find den aktive booking
+            // Find den aktive booking for det specifikke rum
             var booking = room.Bookings.FirstOrDefault(b => b.IsActive && b.Status == "Active");
             if (booking != null)
             {
                 booking.Status = "Cancelled";
                 booking.IsActive = false;
+
+                // Hvis der stadig er aktive bookinger for lokalet, behold status
+                if (room.Bookings.Any(b => b.IsActive && b.Status == "Active"))
+                {
+                    room.IsBooked = true;
+                }
+                else
+                {
+                    room.IsBooked = false;
+                    room.BookedByUserId = null;
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Ingen aktive bookinger fundet for dette lokale.";
+                return RedirectToPage(new { filter = Filter });
             }
 
-            // Fjern bookingstatus fra lokalet
-            room.IsBooked = false;
-            var bookedUserId = room.BookedByUserId;
-            room.BookedByUserId = null;
-
             // Opret notifikation
+            var bookedUserId = room.BookedByUserId;
             if (bookedUserId.HasValue) // Hvis bookedUserId har en værdi
             {
                 var notification = new Notification
@@ -100,6 +112,26 @@ namespace Zealand_Lokale_Booking.Pages.Booking
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
