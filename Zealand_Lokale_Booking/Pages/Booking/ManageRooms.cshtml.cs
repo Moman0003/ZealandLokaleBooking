@@ -20,17 +20,17 @@ namespace Zealand_Lokale_Booking.Pages.Booking
         }
 
         public List<Room> Rooms { get; set; }
-        public string Filter { get; set; } // Filtrering af lokaler
+        public string Filter { get; set; } // Bruges til at bestemme filtreringen
 
         public void OnGet(string filter = "all")
         {
             Filter = filter;
 
-            // Filtrering af lokaler baseret på status
+            // Filtrer lokaler baseret på parameter
             if (filter == "booked")
             {
                 Rooms = _context.Rooms
-                    .Include(r => r.BookedByUser)
+                    .Include(r => r.BookedByUser) // Inkluder brugeren, der har booket lokalet
                     .Where(r => r.IsBooked)
                     .ToList();
             }
@@ -63,7 +63,7 @@ namespace Zealand_Lokale_Booking.Pages.Booking
             var bookedUserId = room.BookedByUserId;
             room.BookedByUserId = null;
 
-            // Opdater bookingstatus
+            // Opdater tilknyttet booking
             var booking = _context.Bookings.FirstOrDefault(b => b.RoomId == roomId && b.Status == "Active");
             if (booking != null)
             {
@@ -71,7 +71,7 @@ namespace Zealand_Lokale_Booking.Pages.Booking
                 booking.IsActive = false;
             }
 
-            // Opret notifikation
+            // Tilføj notifikation til brugeren
             if (bookedUserId.HasValue)
             {
                 var notification = new Notification
@@ -86,12 +86,11 @@ namespace Zealand_Lokale_Booking.Pages.Booking
 
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = $"Bookingen for lokalet \"{room.RoomName}\" blev annulleret, og brugeren fik en notifikation.";
+            TempData["SuccessMessage"] = $"Bookingen for lokalet \"{room.RoomName}\" blev annulleret, og brugeren fik tilsendt en notifikation.";
             return RedirectToPage(new { filter = Filter });
         }
     }
 }
-
 
 
 

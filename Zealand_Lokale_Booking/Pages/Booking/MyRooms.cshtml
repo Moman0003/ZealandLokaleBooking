@@ -9,7 +9,6 @@
 <h1>Mine Lokaler</h1>
 <p>Her er en liste over de lokaler, du har booket:</p>
 
-<!-- Vis succes- eller fejlmeddelelser -->
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">
@@ -28,46 +27,59 @@
     <thead>
         <tr>
             <th>Lokale</th>
-            <th>Kapacitet</th>
-            <th>Type</th>
+            <th>Starttid</th>
+            <th>Sluttid</th>
+            <th>Status</th>
             <th>Handling</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var room in Model.BookedRooms)
+        @if (Model.ActiveBookings != null && Model.ActiveBookings.Any())
+        {
+            @foreach (var booking in Model.ActiveBookings)
+            {
+                <tr>
+                    <td>@booking.Room.RoomName</td>
+                    <td>@booking.StartTime.ToString("dd-MM-yyyy HH:mm")</td>
+                    <td>@booking.EndTime.ToString("dd-MM-yyyy HH:mm")</td>
+                    <td>
+                        <span class="badge bg-success">Aktiv</span>
+                    </td>
+                    <td>
+                        <!-- Knap der åbner modal -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@booking.Room.RoomId">
+                            Annuller
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>@room.RoomName</td>
-                <td>@room.Capacity</td>
-                <td>@room.RoomType</td>
-                <td>
-                    <!-- Knap der åbner modal -->
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@room.RoomId">
-                        Slet
-                    </button>
-                </td>
+                <td colspan="5" class="text-center">Ingen aktive bookinger.</td>
             </tr>
         }
     </tbody>
 </table>
 
-<!-- Modal for sletning -->
-@foreach (var room in Model.BookedRooms)
+<!-- Modal for annullering -->
+@foreach (var booking in Model.ActiveBookings)
 {
-    <div class="modal fade" id="deleteModal-@room.RoomId" tabindex="-1" aria-labelledby="deleteModalLabel-@room.RoomId" aria-hidden="true">
+    <div class="modal fade" id="deleteModal-@booking.Room.RoomId" tabindex="-1" aria-labelledby="deleteModalLabel-@booking.Room.RoomId" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel-@room.RoomId">Bekræft Sletning af @room.RoomName</h5>
+                    <h5 class="modal-title" id="deleteModalLabel-@booking.Room.RoomId">Bekræft Annullering</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Er du sikker på, at du vil slette booking af @room.RoomName?
+                    Er du sikker på, at du vil annullere bookingen for @booking.Room.RoomName?
                 </div>
                 <div class="modal-footer">
                     <form method="post" asp-page-handler="DeleteRoom">
-                        <input type="hidden" name="roomId" value="@room.RoomId" />
-                        <button type="submit" class="btn btn-danger">Bekræft Sletning</button>
+                        <input type="hidden" name="roomId" value="@booking.Room.RoomId" />
+                        <button type="submit" class="btn btn-danger">Bekræft</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuller</button>
                     </form>
                 </div>
