@@ -17,5 +17,13 @@
       <jdbc-url>Server=mssql1.unoeuro.com,1433;Database=isomagid_dk_db_lokale_booking;User Id=isomagid_dk;Password=mk2GfahFy3Bnbg9R5dtx;TrustServerCertificate=True;</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="isomagid_dk_db_lokale_booking@mssql1.unoeuro.com [3]" uuid="4758022f-c088-48cb-8a27-5e9329d40523">
+      <driver-ref>sqlserver.jb</driver-ref>
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>com.jetbrains.jdbc.sqlserver.SqlServerDriver</jdbc-driver>
+      <jdbc-url>Server=mssql1.unoeuro.com,1433;Database=isomagid_dk_db_lokale_booking;User Id=isomagid_dk;Password=mk2GfahFy3Bnbg9R5dtx;TrustServerCertificate=True;</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

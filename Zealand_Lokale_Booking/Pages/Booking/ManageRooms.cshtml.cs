@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using ZealandLokaleBooking.Data;
-using ZealandLokaleBooking.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System;
+using ZealandLokaleBooking.Data; // Namespace for databasekonteksten
+using ZealandLokaleBooking.Models; // Namespace for modellerne
+using Microsoft.EntityFrameworkCore; // For Include og ThenInclude metoder
+using Microsoft.AspNetCore.Mvc; // For IActionResult og TempData
+using System.Collections.Generic; // For List<T>
+using System.Linq; // For LINQ-metoder
+using System.Threading.Tasks; // For async/await
+using System; // For DateTime
 
 namespace Zealand_Lokale_Booking.Pages.Booking
 {
@@ -14,51 +14,58 @@ namespace Zealand_Lokale_Booking.Pages.Booking
     {
         private readonly ApplicationDbContext _context;
 
+        // Konstruktor til at injicere databasekonteksten
         public ManageRoomsModel(ApplicationDbContext context)
         {
             _context = context;
         }
 
+        // Liste over lokaler, der vises i View
         public List<Room> Rooms { get; set; }
-        public string Filter { get; set; } // Filtrering af lokaler
 
+        // Filtreringsparameter til at sortere lokaler
+        public string Filter { get; set; }
+
+        // Håndterer GET-forespørgsler og henter filtrerede lokaler
         public void OnGet(string filter = "all")
         {
             Filter = filter;
 
-            // Hent lokaler og associerede bookinger samt brugere
+            // Start en forespørgsel, der inkluderer lokaler, deres bookinger og brugere
             var query = _context.Rooms
-                .Include(r => r.Bookings.Where(b => b.IsActive && b.Status == "Active"))
-                .ThenInclude(b => b.User)
+                .Include(r => r.Bookings.Where(b => b.IsActive && b.Status == "Active")) // Kun aktive bookinger
+                .ThenInclude(b => b.User) // Inkluder brugeroplysninger for bookinger
                 .AsQueryable();
 
+            // Tilføj filtrering baseret på parameteren
             if (filter == "booked")
             {
-                // Vis kun lokaler med aktive bookinger
-                query = query.Where(r => r.Bookings.Any(b => b.IsActive && b.Status == "Active"));
+                query = query.Where(r => r.Bookings.Any(b => b.IsActive && b.Status == "Active")); // Kun bookede lokaler
             }
             else if (filter == "available")
             {
-                // Vis kun lokaler uden aktive bookinger
-                query = query.Where(r => !r.Bookings.Any(b => b.IsActive && b.Status == "Active"));
+                query = query.Where(r => !r.Bookings.Any(b => b.IsActive && b.Status == "Active")); // Kun ledige lokaler
             }
 
-            Rooms = query.ToList();
+            Rooms = query.ToList(); // Udfør forespørgslen og konverter til en liste
         }
 
+        // Håndterer POST-forespørgsler for at annullere en booking
         public async Task<IActionResult> OnPostCancelBookingAsync(int roomId)
         {
+            // Find lokalet og dets tilknyttede bookinger
             var room = _context.Rooms
                 .Include(r => r.Bookings)
                 .FirstOrDefault(r => r.RoomId == roomId);
 
+            // Kontrollér, om lokalet findes og har aktive bookinger
             if (room == null || !room.Bookings.Any(b => b.IsActive && b.Status == "Active"))
             {
                 TempData["ErrorMessage"] = "Lokalet har ingen aktiv booking.";
                 return RedirectToPage(new { filter = Filter });
             }
 
-            // Find aktive bookinger
+            // Find den første aktive booking og markér den som annulleret
             var booking = room.Bookings.FirstOrDefault(b => b.IsActive && b.Status == "Active");
             if (booking != null)
             {
@@ -66,16 +73,16 @@ namespace Zealand_Lokale_Booking.Pages.Booking
                 booking.IsActive = false;
             }
 
-            // Opdater lokalet som ledigt, hvis ingen aktive bookinger er tilbage
+            // Hvis der ikke er flere aktive bookinger, opdateres lokalet som ledigt
             if (!room.Bookings.Any(b => b.IsActive && b.Status == "Active"))
             {
                 room.IsBooked = false;
                 room.BookedByUserId = null;
             }
 
-            // Opret notifikation
+            // Opret en notifikation til brugeren, hvis lokalet var booket
             var bookedUserId = room.BookedByUserId;
-            if (bookedUserId.HasValue) // Hvis bookedUserId har en værdi
+            if (bookedUserId.HasValue) // Kun hvis der er en bruger tilknyttet
             {
                 var notification = new Notification
                 {
@@ -87,14 +94,17 @@ namespace Zealand_Lokale_Booking.Pages.Booking
                 _context.Notifications.Add(notification);
             }
 
+            // Gem ændringerne i databasen
             await _context.SaveChangesAsync();
 
+            // Giv feedback til brugeren om handlingen
             TempData["SuccessMessage"] =
                 $"Bookingen for lokalet \"{room.RoomName}\" blev annulleret, og brugeren fik en notifikation.";
             return RedirectToPage(new { filter = Filter });
         }
     }
 }
+
 
 
 
